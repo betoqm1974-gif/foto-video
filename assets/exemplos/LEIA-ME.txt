@@ -1,0 +1,7 @@
+Conteúdos nesta pasta foram copiados APENAS do último Planos.zip enviado.
+- Fotos dos planos: assets/exemplos/planos_foto/ (nomes originais)
+- Vídeos dos planos (Pessoas): assets/exemplos/planos_video/ (nomes originais)
+- Ângulos: assets/exemplos/angulos/ (placeholders prontos para substituir)
+
+
+Regra dos Terços (imagens): assets/exemplos/tercos/
