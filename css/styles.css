@@ -398,3 +398,129 @@ body.nav-open .menuBtn .burger span:nth-child(3){bottom:auto; top:8.5px; transfo
   outline:none !important;
   transform:none !important;
 }
+
+/* Desktop: Início como casinha (texto escondido só visualmente) */
+@media (min-width: 821px){
+  .navlist a.homeLink{font-size:inherit; padding-left:14px; padding-right:14px}
+  .navlist a.homeLink::before{content:none !important;}
+  .navlist a.homeLink::after{left:6px; right:6px}
+}
+
+/* Galeria */
+.galleryGrid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap:14px;
+}
+.galleryItem{
+  display:block;
+  border-radius:16px;
+  overflow:hidden;
+  background:rgba(255,255,255,.05);
+}
+.galleryItem img{
+  width:100%;
+  height:260px;
+  object-fit:cover;
+  display:block;
+}
+@media (max-width: 980px){
+  .galleryGrid{grid-template-columns: repeat(2, minmax(0,1fr));}
+  .galleryItem img{height:240px}
+}
+@media (max-width: 520px){
+  .galleryGrid{grid-template-columns: 1fr;}
+  .galleryItem img{height:220px}
+}
+
+/* Subtítulo no cabeçalho */
+.brand .title .subtitle{
+  display:block;
+  font-size:0.88rem;
+  opacity:0.9;
+  margin-top:2px;
+}
+@media (max-width: 820px){
+  .brand .title .subtitle{font-size:0.85rem}
+}
+
+/* Index: fotografia abaixo da introdução */
+.introPhoto{
+  margin: 18px 0 0;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 26px rgba(0,0,0,.35);
+}
+.introPhoto img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+/* Index: bloco separado para fotografia */
+.photoCard{ margin-top: 18px; }
+.photoCard .introPhoto{ margin: 0; }
+
+/* Index: lista de objetivos (bullets) */
+.introList{ margin-top: 6px; }
+.introLead{ margin: 0 0 8px; }
+.introBullets{
+  margin: 0;
+  padding-left: 2.1rem;   /* mais à frente */
+  line-height: 1.55;
+  font-size: 0.92em;      /* ligeiramente menor que a linha anterior */
+  color: inherit;         /* mesma cor da linha anterior */
+  font-family: inherit;   /* mesma fonte da linha anterior */
+}
+.introBullets li{ margin: 6px 0; }
+
+/* mantém o mobile limpo */
+}
+
+  #menuPrincipal{display:flex; flex-wrap:wrap; gap:10px; margin:0; padding:0}
+}
+
+@media (max-width: 820px){
+  .menuQuote{display:none;}
+}
+/* garantir alinhamento e encosto à direita no desktop */
+@media (min-width: 821px){
+  #navPanel{display:flex; align-items:flex-start; gap:18px; width:100%}
+  #menuPrincipal{display:flex; flex-wrap:wrap; gap:10px; margin:0; padding:0}
+  .menuQuote{flex:1 1 auto; justify-self:flex-end}
+}
+
+
+/* Citação alinhada ao menu - encostada à direita */
+.menuQuote{
+  text-align:right;
+  font-size:0.68rem; /* um pouquinho maior */
+  font-style:italic;
+  line-height:1.15;
+  opacity:0.92;
+  max-width: 420px;
+}
+
+/* Mobile: aparece abaixo do menu, alinhada à direita */
+@media (max-width: 820px){
+  .menuQuote{
+    position:static;
+    margin:8px 0 0;
+    padding:0;
+    max-width:none;
+  }
+}
+
+/* Desktop: encostada à direita na linha do menu */
+@media (min-width: 821px){
+  #navPanel{position:relative;}
+  .menuQuote{
+    position:absolute;
+    right:0;
+    top:0;
+    margin:0;
+    padding-top:6px;
+  }
+  /* reserva espaço para não sobrepor o menu */
+  #menuPrincipal{padding-right:440px;}
+}
