@@ -16,6 +16,7 @@
 <header>
  <div class="navwrap">
  <div class="topbar">
+ <button class="menuBtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="navPanel" aria-label="Abrir menu"><span class="burger" aria-hidden="true"><span></span><span></span><span></span></span></button>
  <a class="brand" href="index.html">
  <img src="assets/img/logo.png" alt="Logótipo do site: fotografia e vídeo" />
  <span class="title">
@@ -31,11 +32,11 @@
  </div>
  </div>
 
- <nav aria-label="Menu principal">
+ <nav id="navPanel" aria-label="Menu principal">
  <ul class="navlist" id="menuPrincipal">
  <li><a href="index.html">Início</a></li><li><a href="planos.html">Planos</a></li><li><a href="angulos.html">Ângulos</a></li><li><a href="tercos.html">Regra dos Terços</a></li>
-          <li><a href="movimentos.html">Movimentos</a></li><li><a href="praticar.html">Praticar</a></li><li><a href="projeto.html">Projeto</a></li><li><a href="quiz.html">Quiz</a></li><li><a href="glossario.html">Glossário</a></li>
- </ul>
+          <li><a href="movimentos.html">Movimentos</a></li>
+</ul>
  </nav>
  </div>
 </header>
@@ -78,11 +79,8 @@
 
 <footer>
  <div class="footerwrap">
- <div>Manuel Morais © 2026 - Site educativo (12.º ano | Aplicações Informáticas)</div>
- <div>
- <a href="glossario.html">Glossário</a> ·
- <a href="recursos.html" style="display:none">Recursos</a>
- </div>
+  <div>Manuel Morais © 2026 - 12.º ano | AI-B</div>
+  <div><a href="glossario.html">Glossário</a></div>
  </div>
 </footer>
 <script src="js/ui.js"></script>

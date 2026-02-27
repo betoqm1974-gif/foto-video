@@ -43,6 +43,19 @@
  function init(){
  setActiveMenu();
 
+ // Mobile menu
+ const menuBtn = document.getElementById('menuBtn');
+ const navPanel = document.getElementById('navPanel');
+ if(menuBtn && navPanel){
+  const closeMenu = () => { body.classList.remove('nav-open'); menuBtn.setAttribute('aria-expanded','false'); menuBtn.setAttribute('aria-label','Abrir menu'); };
+  const openMenu = () => { body.classList.add('nav-open'); menuBtn.setAttribute('aria-expanded','true'); menuBtn.setAttribute('aria-label','Fechar menu'); };
+  menuBtn.addEventListener('click', () => {
+    const isOpen = body.classList.contains('nav-open');
+    (isOpen ? closeMenu : openMenu)();
+  });
+  navPanel.querySelectorAll('a[href]').forEach(a => a.addEventListener('click', closeMenu));
+ }
+
  // Restore settings
  const scale = parseInt(get('fontScale', '100'), 10);
  applyFontScale(isFinite(scale) ? Math.min(140, Math.max(90, scale)) : 100);

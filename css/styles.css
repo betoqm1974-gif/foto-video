@@ -283,3 +283,118 @@ footer{
  justify-content:space-between;
  gap:10px;
 }
+
+
+/* Menu mobile (hambúrguer) */
+.menuBtn{display:none}
+@media (max-width: 820px){
+  .topbar{flex-wrap:wrap; align-items:flex-start}
+  .menuBtn{display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.25); color:var(--text)}
+  .tools{width:100%; order:1; justify-content:flex-end; margin-top:6px}
+  .brand{width:100%; order:2; margin-top:10px}
+  .brand img{width:62px; height:auto}
+  .brand .title strong{display:block; font-size:1.15rem; line-height:1.15}
+  .brand .title span{display:block}
+  #navPanel{display:none; margin-top:10px}
+  body.nav-open #navPanel{display:block}
+  .navlist{flex-direction:column; align-items:stretch}
+  .navlist a{display:block; padding:12px 12px}
+}
+
+
+  #navPanel{order:3}
+  .menuBtn{order:0}
+  .tools{order:1}
+}
+
+footer{font-size:0.72rem}
+
+/* Mobile: tools no topo; logo e texto ocupam a largura; menu por baixo do logotipo */
+@media (max-width: 820px){
+  .topbar{flex-wrap:wrap; align-items:flex-start}
+  .tools{width:100%; order:0; justify-content:flex-end; margin-top:0}
+  .brand{width:100%; order:1; margin-top:10px}
+  .brand img{width:62px; height:auto}
+  .brand .title strong{display:block; font-size:1.15rem; line-height:1.15}
+  .brand .title span{display:block}
+  .menuBtn{order:2; margin-top:10px}
+  #navPanel{margin-top:8px}
+}
+
+/* Desktop: efeito de barra branca no menu */
+@media (min-width: 821px){
+  .navlist a{position:relative}
+  .navlist a::after{
+    content:"";
+    position:absolute;
+    left:10px; right:10px;
+    bottom:4px;
+    height:3px;
+    border-radius:999px;
+    background:rgba(255,255,255,.92);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .18s ease;
+  }
+  .navlist a:hover::after,
+  .navlist a:focus-visible::after,
+  .navlist a[aria-current="page"]::after{
+    transform:scaleX(1);
+  }
+}
+
+/* Menu: remover retângulo de foco (fica a barra branca como indicador) */
+.navlist a:focus,
+.navlist a:focus-visible{
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Botão hambúrguer (mobile) - sem texto */
+.menuBtn{gap:0; min-width:44px; justify-content:center}
+.menuBtn .burger{position:relative; width:28px; height:20px; display:inline-block}
+.menuBtn .burger span{
+  position:absolute; left:0; right:0;
+  height:3px; border-radius:999px;
+  background:var(--text);
+  transition:transform .18s ease, opacity .18s ease, top .18s ease, bottom .18s ease;
+}
+.menuBtn .burger span:nth-child(1){top:0}
+.menuBtn .burger span:nth-child(2){top:8.5px}
+.menuBtn .burger span:nth-child(3){bottom:0}
+
+/* Aberto: vira X com 2 traços */
+body.nav-open .menuBtn .burger span:nth-child(1){top:8.5px; transform:rotate(45deg)}
+body.nav-open .menuBtn .burger span:nth-child(2){opacity:0}
+body.nav-open .menuBtn .burger span:nth-child(3){bottom:auto; top:8.5px; transform:rotate(-45deg)}
+
+/* Desktop: sem retângulo/sombra no menu (fica só a barra branca) */
+@media (min-width: 821px){
+  .navlist a:hover,
+  .navlist a:focus,
+  .navlist a:focus-visible{
+    outline:none !important;
+    box-shadow:none !important;
+    background:transparent !important;
+  }
+}
+
+/* Menu: remover todos os efeitos, mantendo apenas a barra branca */
+.navlist a{
+  background:transparent !important;
+  box-shadow:none !important;
+  border:none !important;
+  text-decoration:none !important;
+  transform:none !important;
+  transition:none !important;
+}
+.navlist a:hover,
+.navlist a:active,
+.navlist a:focus,
+.navlist a:focus-visible{
+  background:transparent !important;
+  box-shadow:none !important;
+  border:none !important;
+  outline:none !important;
+  transform:none !important;
+}
