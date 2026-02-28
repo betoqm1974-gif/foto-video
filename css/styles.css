@@ -331,6 +331,24 @@ header{
 /* Cantos redondos (como na página Planos) */
 .mediaRound{border-radius:16px; overflow:hidden; display:block; max-width:100%}
 
+/* Esquema dos Planos (imagem mais pequena, sem cantos arredondados) */
+.schemeImg{
+  display:block;
+  width:100%;
+  /* +40% face ao tamanho anterior (50% -> ~70%) */
+  max-width:72%;
+  height:auto;
+  margin:0 auto;
+  border-radius:0;
+}
+
+/* Esquema: cursor tipo lupa no thumbnail */
+.lightboxLink{cursor:pointer;}
+
+@media (max-width: 720px){
+  .schemeImg{max-width:100%;}
+}
+
 /* Bloco com imagem a preencher o retângulo (cantos arredondados) */
 .mediaFrame{width:100%; aspect-ratio: 16 / 9; border-radius:16px; overflow:hidden;}
 .mediaFrame img{width:100%; height:100%; object-fit:cover; display:block;}
@@ -1105,8 +1123,8 @@ html.hc .card.card-movimentos{
 }
 .schemeFigure .schemeImg{
   display: block;       /* remove espaço/linha por baseline */
-  width: min(360px, 100%);
-  height: auto;
+  width: min(252px, 100%);
+height: auto;
   border-radius: 0;     /* quadrada */
   background: transparent;
 }
@@ -1120,4 +1138,26 @@ header, footer{ background: var(--panel2) !important; }
 header, footer{
   background: var(--panel2) !important;
   backdrop-filter: none !important;
+}
+
+
+/* Esquema (Planos): miniatura SEM CORTE (igual ao comportamento das fotos de exemplo) */
+.figure.figure--scheme{
+  /* Mantém a mesma largura visual das fotografias de exemplo (ex.: Plano Geral) */
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+}
+.figure.figure--scheme a{display:block;}
+.figure.figure--scheme img{
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* Esquema (Planos): não limitar pela altura (para não encolher a largura) */
+.figure.figure--scheme img{
+  max-height: none !important;
+  object-fit: contain !important;
 }

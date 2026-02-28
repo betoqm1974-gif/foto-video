@@ -154,7 +154,11 @@
 
   document.addEventListener('click', (e) => {
     // 1) abrir lightbox a partir de links com data-full
-    const a = e.target && e.target.closest ? e.target.closest('a.galleryItem[data-full], a.indexPhotoLink[data-full]') : null;
+    // Links que abrem o lightbox:
+    // - .galleryItem (galeria)
+    // - .indexPhotoLink (foto do index)
+    // - .lightboxLink (outros casos, sem herdar estilos de miniaturas)
+    const a = e.target && e.target.closest ? e.target.closest('a.galleryItem[data-full], a.indexPhotoLink[data-full], a.lightboxLink[data-full]') : null;
     if(a){
       e.preventDefault();
       const src = a.getAttribute('data-full');
