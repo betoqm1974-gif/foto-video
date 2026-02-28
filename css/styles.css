@@ -655,14 +655,17 @@ body.modal-open{overflow:hidden}
 /* Tema claro (variáveis) */
 body.theme-light{
   --bg:#f2f2f2;
-  --panel:rgba(255,255,255,.86);
-  --panel2:rgba(255,255,255,.74);
-  --text:#111;
-  --muted:#333;
-  --border:rgba(0,0,0,.16);
-  --shadow: 0 10px 30px rgba(0,0,0,.18);
-  --focus:#0b63ff;
+  --panel:rgba(255,255,255,.92);
+  --panel2:#e6e6e6;
+  --text:#111111;
+  --muted:#2a2a2a;
+  --border:rgba(0,0,0,.14);
+  --shadow: 0 10px 26px rgba(0,0,0,.18);
+  --focus:#111111;
+  --link:#111111;
+  --menubar: rgba(0,0,0,.70);
   --cardbase: rgba(255,255,255,0.20);
+  --overlay-backdrop: rgba(0,0,0,.62);
 }
 
 /* Ajuste do overlay do fundo no tema claro */
@@ -754,9 +757,9 @@ body.theme-light .toolBtn{
 
 /* Tema base (variáveis) */
 body.theme-dark{
-  --bg:#0b0f14;
-  --panel:rgba(20,24,32,.86);
-  --panel2:rgba(20,24,32,.70);
+  --bg:#0f0f10;
+  --panel:rgba(24,24,26,.86);
+  --panel2:#1a1a1c;
   --text:#ffffff;
   --muted:rgba(255,255,255,.86);
   --border:rgba(255,255,255,.16);
@@ -764,7 +767,8 @@ body.theme-dark{
   --focus:rgba(255,255,255,.9);
   --link:#ffffff;
   --menubar: rgba(255,255,255,.92);
-  --cardbase: rgba(20,24,32,0.20);
+  --cardbase: rgba(24,24,26,0.20);
+  --overlay-backdrop: rgba(0,0,0,.78);
 }
 body.theme-light{
   --bg:#f2f2f2;
@@ -1088,3 +1092,32 @@ html.hc .card.card-movimentos{
 
 /* Esquema (Planos): mostrar imagem inteira sem cortar */
 .mediaFrame--contain img{ object-fit: contain; }
+
+
+/* Esquema (Planos): imagem pequena, sem cantos arredondados e sem "linhas" */
+.schemeFigure{
+  margin: 14px 0 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  display: flex;
+  justify-content: center;
+}
+.schemeFigure .schemeImg{
+  display: block;       /* remove espaço/linha por baseline */
+  width: min(360px, 100%);
+  height: auto;
+  border-radius: 0;     /* quadrada */
+  background: transparent;
+}
+
+
+/* Forçar cinza neutro nas áreas sem foto (cabeçalho/rodapé e caixas) */
+header, footer{ background: var(--panel2) !important; }
+
+
+/* Cabeçalho e rodapé sem transparência */
+header, footer{
+  background: var(--panel2) !important;
+  backdrop-filter: none !important;
+}
