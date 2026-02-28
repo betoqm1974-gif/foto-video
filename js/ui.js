@@ -35,12 +35,33 @@
  }
 
  function toggleContrast(btn){
- const on = body.classList.toggle('hc');
- btn.setAttribute('aria-pressed', on ? 'true' : 'false');
- set('highContrast', on ? '1' : '0');
- }
+  const on = document.documentElement.classList.toggle('hc');
+  document.body.classList.toggle('hc', on);
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  set('highContrast', on ? '1' : '0');
+}
 
  function init(){
+  // Tema claro/escuro
+  const themeBtn = document.getElementById("themeBtn");
+  const applyTheme = (t) => {
+    document.body.classList.toggle("theme-light", t === "light");
+    document.body.classList.toggle("theme-dark", t === "dark");
+    if(themeBtn) themeBtn.setAttribute("aria-pressed", t === "light" ? "true" : "false");
+  };
+  const savedTheme = localStorage.getItem("theme");
+  const prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+  const initialTheme = savedTheme ? savedTheme : (prefersLight ? "light" : "dark");
+  applyTheme(initialTheme);
+  if(themeBtn){
+    themeBtn.addEventListener("click", () => {
+      const isLight = document.body.classList.contains("theme-light");
+      const next = isLight ? "dark" : "light";
+      localStorage.setItem("theme", next);
+      applyTheme(next);
+    });
+  }
+
  setActiveMenu();
 
  // Mobile menu
@@ -61,7 +82,7 @@
  applyFontScale(isFinite(scale) ? Math.min(140, Math.max(90, scale)) : 100);
 
  const hc = get('highContrast','0') === '1';
- if(hc) body.classList.add('hc');
+ if(hc){ document.documentElement.classList.add('hc'); body.classList.add('hc'); } else { document.documentElement.classList.remove('hc'); body.classList.remove('hc'); }
 
  const btnAplus = document.getElementById('aPlus');
  const btnAminus = document.getElementById('aMinus');
@@ -85,5 +106,91 @@
  }
  }
 
- document.addEventListener('DOMContentLoaded', init);
+
+
+
+// Popup (lightbox): galeria e foto do index (delegado)
+(function(){
+  const getLb = () => {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    if(!lightbox || !lightboxImg) return null;
+    return { lightbox, lightboxImg };
+  };
+
+  const resetZoom = () => {
+    const lb = document.getElementById('lightbox');
+    if(lb) lb.classList.remove('is-zoomed');
+  };
+
+  const openLb = (src, alt) => {
+    const lb = getLb();
+    if(!lb) return;
+    lb.lightboxImg.src = src;
+    lb.lightboxImg.alt = alt || 'Imagem';
+    lb.lightbox.classList.add('is-open');
+    lb.lightbox.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+    resetZoom();
+    const btn = lb.lightbox.querySelector('.lightbox__close');
+    if(btn) btn.focus();
+  };
+
+  const closeLb = () => {
+    const lb = getLb();
+    if(!lb) return;
+    lb.lightbox.classList.remove('is-open');
+    lb.lightbox.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-open');
+    lb.lightboxImg.src = '';
+    resetZoom();
+  };
+
+  const toggleZoom = () => {
+    const lb = document.getElementById('lightbox');
+    if(!lb) return;
+    lb.classList.toggle('is-zoomed');
+  };
+
+  document.addEventListener('click', (e) => {
+    // 1) abrir lightbox a partir de links com data-full
+    const a = e.target && e.target.closest ? e.target.closest('a.galleryItem[data-full], a.indexPhotoLink[data-full]') : null;
+    if(a){
+      e.preventDefault();
+      const src = a.getAttribute('data-full');
+      const img = a.querySelector('img');
+      openLb(src, img ? img.alt : '');
+      return;
+    }
+
+    // 2) alternar zoom/fullscreen ao clicar na imagem
+    if(e.target && e.target.id === 'lightboxImg'){
+      e.preventDefault();
+      toggleZoom();
+      return;
+    }
+
+    // 3) fechar ao clicar no backdrop ou no X
+    const lb = document.getElementById('lightbox');
+    if(lb && lb.classList.contains('is-open')){
+      const closeTarget = e.target && e.target.getAttribute ? e.target.getAttribute('data-close') : null;
+      if(closeTarget === '1'){
+        e.preventDefault();
+        closeLb();
+      }
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    const lb = document.getElementById('lightbox');
+    if(!lb || !lb.classList.contains('is-open')) return;
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      closeLb();
+    }
+  });
+})();
+
+
+document.addEventListener('DOMContentLoaded', init);
 })();

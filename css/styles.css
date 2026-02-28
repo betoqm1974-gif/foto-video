@@ -38,10 +38,10 @@ a:focus, button:focus, input:focus{outline: 3px solid var(--focus); outline-offs
 .skip-link:focus{left:16px; top:16px; width:auto; height:auto; padding:10px 14px; background:#000; border:1px solid var(--border); border-radius:12px; z-index:9999}
 
 header{
- position: relative;
- background:#000000;
- backdrop-filter: blur(8px);
- border-bottom:1px solid rgba(255,255,255,.08);
+  position: relative;
+  background: var(--panel2);
+  backdrop-filter: blur(8px);
+  border-bottom:1px solid var(--border);
 }
 .navwrap{
  max-width:var(--max);
@@ -245,9 +245,68 @@ kbd{
  .navlist{justify-content:flex-start}
 }
 body.hc{
- background-image: none;
- background: #000;
+  /* Modo de contraste (alto contraste) */
+  --bg:#000000;
+  --panel:#000000;
+  --panel2:#000000;
+  --text:#ffffff;
+  --muted:#ffffff;
+  --border:rgba(255,255,255,.55);
+  --shadow:none;
+  --focus:#ffffff;
+  --link:#ffffff;
+  --menubar: rgba(255,255,255,.92);
+
+  background-image:none !important;
+  background:#000000 !important;
+  color: var(--text) !important;
+  --cardbase: #000000;
 }
+
+/* Forçar texto a branco no modo contraste (evita cores “presas”) */
+body.hc header,
+body.hc footer,
+body.hc main,
+body.hc .panel,
+body.hc .card,
+body.hc .content,
+body.hc .popup,
+body.hc .modal,
+body.hc .navPanel,
+body.hc .navlist a,
+body.hc h1, body.hc h2, body.hc h3, body.hc h4,
+body.hc p, body.hc li, body.hc figcaption, body.hc small, body.hc span{
+  color: var(--text) !important;
+}
+
+body.hc a{ color: var(--link) !important; }
+body.hc .navlist a{ border-color: transparent !important; }
+body.hc .navlist a[aria-current="page"]{
+  border-color: rgba(255,255,255,.75) !important;
+  background: rgba(255,255,255,.12) !important;
+}
+body.hc .navlist a:hover{
+  border-color: rgba(255,255,255,.55) !important;
+  background: rgba(255,255,255,.08) !important;
+}
+
+/* CONTRASTE FORÇADO (fallback): garante texto branco mesmo quando há cores fixas */
+body.hc *{
+  color:#ffffff !important;
+  border-color: rgba(255,255,255,.55) !important;
+}
+body.hc a{ color:#ffffff !important; }
+body.hc svg, body.hc svg *{
+  stroke:#ffffff !important;
+  fill: none !important;
+}
+body.hc .themeSwitch .themeKnob{ background:#ffffff !important; }
+body.hc img, body.hc video{
+  /* não alterar multimédia */
+  filter:none !important;
+}
+
+
 body.hc header, body.hc body.hc .hero, body.hc .card, body.hc .section{background:#000; border-color: rgba(244,181,70,.55)}
 body.hc .navlist a{color:#ddd}
 body.hc .navlist a[aria-current="page"]{background: rgba(244,181,70,.18)}
@@ -260,17 +319,26 @@ h1,h2,h3{color:#ffffff}
 .section p, .card p, .note{max-width:none}
 
 /* Override: topo e rodapé em cinza */
-header{background:#1e1e1e !important}
+header{
+  position: relative;
+  background: var(--panel2);
+  backdrop-filter: blur(8px);
+  border-bottom:1px solid var(--border);
+}
 
 
 
 /* Cantos redondos (como na página Planos) */
 .mediaRound{border-radius:16px; overflow:hidden; display:block; max-width:100%}
 
+/* Bloco com imagem a preencher o retângulo (cantos arredondados) */
+.mediaFrame{width:100%; aspect-ratio: 16 / 9; border-radius:16px; overflow:hidden;}
+.mediaFrame img{width:100%; height:100%; object-fit:cover; display:block;}
+
 /* Rodapé (igual à v6) */
 footer{
- border-top:1px solid rgba(255,255,255,.10);
- background:#000000;
+  border-top:1px solid var(--border);
+  background: var(--panel2);
 }
 .footerwrap{
  max-width:var(--max);
@@ -307,7 +375,10 @@ footer{
   .tools{order:1}
 }
 
-footer{font-size:0.72rem}
+footer{
+  border-top:1px solid var(--border);
+  background: var(--panel2);
+}
 
 /* Mobile: tools no topo; logo e texto ocupam a largura; menu por baixo do logotipo */
 @media (max-width: 820px){
@@ -331,7 +402,7 @@ footer{font-size:0.72rem}
     bottom:4px;
     height:3px;
     border-radius:999px;
-    background:rgba(255,255,255,.92);
+    background: var(--menubar);
     transform:scaleX(0);
     transform-origin:left;
     transition:transform .18s ease;
@@ -524,3 +595,496 @@ body.nav-open .menuBtn .burger span:nth-child(3){bottom:auto; top:8.5px; transfo
   /* reserva espaço para não sobrepor o menu */
   #menuPrincipal{padding-right:440px;}
 }
+
+/* Popup (lightbox) */
+.lightbox{position:fixed; inset:0; display:none; z-index:9999}
+.lightbox.is-open{display:block}
+
+.lightbox__dialog{
+  position:relative;
+  max-width:min(1100px, 92vw);
+  max-height:86vh;
+  margin:7vh auto 0;
+  border-radius:18px;
+  overflow:hidden;
+  background:rgba(0,0,0,.25);
+}
+.lightbox__img{
+  display:block;
+  width:100%;
+  height:86vh;
+  max-height:86vh;
+  object-fit:contain;
+  background:#000;
+}
+.lightbox__close{
+  position:absolute;
+  top:10px; right:10px;
+  width:44px; height:44px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(0,0,0,.35);
+  color: var(--text);
+  font-size:32px;
+  line-height:40px;
+  cursor:pointer;
+}
+.lightbox__close:focus-visible{outline:3px solid rgba(255,255,255,.85); outline-offset:2px}
+body.modal-open{overflow:hidden}
+
+
+
+/* Lightbox: fullscreen (1 clique amplia, outro volta) */
+.lightbox__img{cursor: zoom-in;}
+.lightbox.is-zoomed .lightbox__img{cursor: zoom-out;}
+@media (min-width: 1px){
+  .lightbox.is-zoomed .lightbox__dialog{
+    max-width:100vw;
+    max-height:100vh;
+    margin:0;
+    border-radius:0;
+  }
+  .lightbox.is-zoomed .lightbox__img{
+    width:100vw;
+    height:100vh;
+    max-height:100vh;
+    object-fit:contain;
+  }
+}
+
+/* Tema claro (variáveis) */
+body.theme-light{
+  --bg:#f2f2f2;
+  --panel:rgba(255,255,255,.86);
+  --panel2:rgba(255,255,255,.74);
+  --text:#111;
+  --muted:#333;
+  --border:rgba(0,0,0,.16);
+  --shadow: 0 10px 30px rgba(0,0,0,.18);
+  --focus:#0b63ff;
+  --cardbase: rgba(255,255,255,0.20);
+}
+
+/* Ajuste do overlay do fundo no tema claro */
+body.theme-light{
+  background-image:
+    linear-gradient(rgba(245,245,245,.72), rgba(245,245,245,.78)),
+    url("../assets/img/bg.jpeg");
+}
+
+.toolBtn{
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+
+/* Botão de alternância de tema (preto/branco) */
+.themeSwitch{
+  width: 62px;
+  height: 30px;
+  border-radius: 999px;
+  border: 2px solid var(--text);
+  background: transparent;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  cursor: pointer;
+  line-height: 1;
+}
+.themeSwitch .themeIcon{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+.themeSwitch svg{
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.themeSwitch .themeKnob{
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--text);
+  transform: translateX(0);
+  transition: transform .18s ease;
+}
+body.theme-dark .themeSwitch{
+  border-color: #ffffff;
+}
+body.theme-dark .themeSwitch svg{
+  stroke: #ffffff;
+}
+body.theme-dark .themeSwitch .themeKnob{
+  background: #ffffff;
+  transform: translateX(32px);
+}
+body.theme-light .themeSwitch{
+  border-color: #000000;
+}
+body.theme-light .themeSwitch svg{
+  stroke: #000000;
+}
+body.theme-light .themeSwitch .themeKnob{
+  background: #000000;
+  transform: translateX(0);
+}
+.themeSwitch:focus-visible{
+  outline: 2px solid var(--menubar);
+  outline-offset: 3px;
+}
+body.theme-light .toolBtn{
+  background: rgba(0,0,0,.06);
+  border-color: rgba(0,0,0,.16);
+}
+
+/* Tema base (variáveis) */
+body.theme-dark{
+  --bg:#0b0f14;
+  --panel:rgba(20,24,32,.86);
+  --panel2:rgba(20,24,32,.70);
+  --text:#ffffff;
+  --muted:rgba(255,255,255,.86);
+  --border:rgba(255,255,255,.16);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --focus:rgba(255,255,255,.9);
+  --link:#ffffff;
+  --menubar: rgba(255,255,255,.92);
+  --cardbase: rgba(20,24,32,0.20);
+}
+body.theme-light{
+  --bg:#f2f2f2;
+  --panel:rgba(255,255,255,.92);
+  --panel2:rgba(255,255,255,.78);
+  --text:#111111;
+  --muted:#2a2a2a;
+  --border:rgba(0,0,0,.14);
+  --shadow: 0 10px 26px rgba(0,0,0,.18);
+  --focus:#0b63ff;
+  --link:#111111;
+  --menubar: rgba(0,0,0,.70);
+}
+
+/* Fundo: mantém a foto, muda só o “overlay” */
+body.theme-dark{
+  background-image:
+    linear-gradient(rgba(10,12,16,.62), rgba(10,12,16,.74)),
+    url("../assets/img/bg.jpeg");
+}
+body.theme-light{
+  background-image:
+    linear-gradient(rgba(245,245,245,.72), rgba(245,245,245,.78)),
+    url("../assets/img/bg.jpeg");
+}
+
+/* Aplicação global das cores */
+body{
+  background-color: var(--bg);
+  color: var(--text);
+}
+a{ color: var(--link); }
+p, li{ color: var(--muted); }
+h1, h2, h3, h4{ color: var(--text); }
+
+/* Painéis/cartões */
+.card, .panel, .contentBox, .popupContent, .lightbox__dialog{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+header, footer{
+  border-top:1px solid var(--border);
+  background: var(--panel2);
+}
+footer{
+  border-top:1px solid var(--border);
+  background: var(--panel2);
+}
+
+/* Botões e controlos */
+.toolBtn, button, .btn{
+  color: var(--text);
+  border-color: var(--border);
+}
+body.theme-light .toolBtn, body.theme-light button, body.theme-light .btn{
+  background: rgba(0,0,0,.06);
+}
+body.theme-dark .toolBtn, body.theme-dark button, body.theme-dark .btn{
+  background: rgba(255,255,255,.08);
+}
+
+/* Remover texto branco hard-coded em vários elementos (casos comuns) */
+body.theme-light .title, 
+body.theme-light .brand,
+body.theme-light .brand *{
+  color: var(--text) !important;
+}
+
+/* Ícones (não fotografias): ajusta para tema claro se forem brancos */
+body.theme-light img[src*="assets/icons/"]{
+  filter: invert(1);
+}
+
+/* Popup */
+
+body.theme-light 
+.lightbox__close{ color: var(--text); }
+
+
+/* Variáveis de overlay (popup) por tema */
+body.theme-dark{ --overlay-bg: rgba(0,0,0,.86); --overlay-x: #ffffff; }
+body.theme-light{ --overlay-bg: rgba(0,0,0,.72); --overlay-x: #ffffff; }
+body.hc, html.hc{ --overlay-bg: #000000; --overlay-x: #ffffff; }
+
+
+/* Popup (lightbox) adapta-se ao tema/contraste */
+.lightbox{ background: var(--overlay-bg) !important; }
+.lightbox .closeBtn{ color: var(--overlay-x) !important; }
+.lightbox .closeBtn svg, .lightbox .closeBtn svg *{ stroke: var(--overlay-x) !important; }
+
+/* Alto contraste: força texto branco também quando a classe está no <html> */
+html.hc body *{ color:#ffffff !important; border-color: rgba(255,255,255,.55) !important; }
+html.hc body a{ color:#ffffff !important; }
+
+/* Overlay da popup por tema */
+body.theme-dark{ --overlay-backdrop: rgba(0,0,0,.78); }
+body.theme-light{ --overlay-backdrop: rgba(0,0,0,.62); } /* mantém legibilidade */
+body.hc, html.hc{ --overlay-backdrop: rgba(0,0,0,.90); }
+
+/* Popup (lightbox): backdrop e botão fechar */
+.lightbox__backdrop{ background: var(--overlay-backdrop) !important; }
+.lightbox__close{ color:#fff !important; }
+.lightbox__close svg, .lightbox__close svg *{ stroke:#fff !important; fill:none !important; }
+
+/* Alto contraste: força texto branco e remove fundos "presos" */
+body.hc, html.hc body{
+  background-image:none !important;
+  background:#000 !important;
+  color:#fff !important;
+}
+html.hc body *{
+  color:#fff !important;
+  border-color: rgba(255,255,255,.55) !important;
+}
+html.hc header, html.hc footer{
+  background:#000 !important;
+  border-color: rgba(255,255,255,.55) !important;
+}
+html.hc .navlist a::after{ background: rgba(255,255,255,.92) !important; }
+
+
+/* Popup (lightbox): tema claro */
+body.theme-light .lightbox__dialog{
+  background: rgba(255,255,255,.96) !important;
+  border: 1px solid rgba(0,0,0,.14) !important;
+}
+body.theme-light .lightbox__img{
+  background: #ffffff !important;
+}
+body.theme-light .lightbox__close{
+  background: rgba(255,255,255,.35) !important;
+  border-color: rgba(0,0,0,.22) !important;
+  color:#000 !important;
+}
+body.theme-light .lightbox__close:focus-visible{
+  outline:3px solid #000 !important;
+}
+
+
+/* Popup (lightbox): alto contraste (ganha ao tema claro/escuro) */
+html.hc .lightbox__backdrop,
+body.hc .lightbox__backdrop{
+  background: rgba(0,0,0,.90) !important;
+}
+html.hc .lightbox__dialog,
+body.hc .lightbox__dialog{
+  background:#000 !important;
+  border:1px solid rgba(255,255,255,.65) !important;
+  box-shadow:none !important;
+}
+html.hc .lightbox__img,
+body.hc .lightbox__img{
+  background:#000 !important;
+}
+html.hc .lightbox__close,
+body.hc .lightbox__close{
+  background: rgba(0,0,0,.55) !important;
+  border-color: rgba(255,255,255,.65) !important;
+  color:#fff !important;
+}
+html.hc .lightbox__close:focus-visible,
+body.hc .lightbox__close:focus-visible{
+  outline:3px solid #fff !important;
+}
+
+
+/* Alto contraste: cartões/caixas (garante fundo escuro e texto legível) */
+html.hc .card,
+html.hc .panel,
+html.hc .box,
+html.hc .content-box,
+html.hc .content-card,
+html.hc .info-card,
+html.hc .intro-card,
+html.hc .glass,
+html.hc [class*="glass"],
+html.hc .section-card,
+html.hc .topic-card,
+html.hc .feature,
+html.hc .feature-card,
+html.hc .example,
+html.hc .example-card{
+  background:#000 !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.55) !important;
+  box-shadow:none !important;
+}
+
+html.hc .card * ,
+html.hc .panel * ,
+html.hc .box * ,
+html.hc .content-box * ,
+html.hc .content-card * ,
+html.hc .info-card * ,
+html.hc .intro-card * ,
+html.hc .glass * ,
+html.hc [class*="glass"] * ,
+html.hc .section-card * ,
+html.hc .topic-card * ,
+html.hc .feature * ,
+html.hc .feature-card * ,
+html.hc .example * ,
+html.hc .example-card *{
+  color:#fff !important;
+}
+
+/* Listas e marcadores em alto contraste */
+html.hc ul li::marker{ color:#fff !important; }
+
+/* Botões/controles em alto contraste */
+html.hc button, html.hc .btn, html.hc a.btn{
+  background:#000 !important;
+  color:#fff !important;
+  border-color: rgba(255,255,255,.65) !important;
+}
+
+
+/* === FIX: Contraste a sobrepor tema (final do ficheiro) === */
+body.hc{
+  --bg:#000 !important;
+  --panel:#000 !important;
+  --panel2:#000 !important;
+  --text:#fff !important;
+  --muted:#fff !important;
+  --border:#fff !important;
+  --shadow:none !important;
+  --focus:#fff !important;
+  --link:#fff !important;
+  --menubar:#fff !important;
+}
+
+body.hc header,
+body.hc footer,
+body.hc .hero,
+body.hc .card,
+body.hc .section,
+body.hc .panel{
+  background:#000 !important;
+}
+
+body.hc .hero,
+body.hc .card,
+body.hc .section,
+body.hc .panel{
+  border-color:#fff !important;
+}
+
+body.hc p,
+body.hc li,
+body.hc label,
+body.hc .brand-text,
+body.hc .menu a,
+body.hc .menu button,
+body.hc h1,
+body.hc h2,
+body.hc h3{
+  color:#fff !important;
+}
+
+body.hc .menu a.is-active,
+body.hc .menu a[aria-current="page"]{
+  color:#fff !important;
+}
+
+/* Popup (lightbox): respeitar tema claro */
+body.theme-light .lightbox__dialog{ background:rgba(255,255,255,.86); }
+body.theme-light .lightbox__img{ background:#fff; }
+/* X sempre branco (pedido) */
+.lightbox__close{ color:#fff !important; }
+
+
+
+/* Cores dos cartões no index (mantém layout/efeitos) */
+.grid .card.card-planos{
+  background: linear-gradient(0deg, rgba(255,60,60,.18), rgba(255,60,60,.18)), var(--cardbase);
+}
+.grid .card.card-angulos{
+  background: linear-gradient(0deg, rgba(60,200,120,.18), rgba(60,200,120,.18)), var(--cardbase);
+}
+.grid .card.card-tercos{
+  background: linear-gradient(0deg, rgba(255,210,60,.20), rgba(255,210,60,.20)), var(--cardbase);
+}
+.grid .card.card-movimentos{
+  background: linear-gradient(0deg, rgba(255,140,60,.20), rgba(255,140,60,.20)), var(--cardbase);
+}
+
+/* Alto contraste: mantém preto */
+html.hc .grid .card.card-planos,
+html.hc .grid .card.card-angulos,
+html.hc .grid .card.card-tercos,
+html.hc .grid .card.card-movimentos{
+  background:#000 !important;
+}
+
+
+
+
+/* Cores dos cartões no index (mais visíveis + mais transparência) */
+.card.card-planos{
+  background: linear-gradient(0deg, rgba(255,80,80,.22), rgba(255,80,80,.22)), var(--cardbase) !important;
+}
+.card.card-angulos{
+  background: linear-gradient(0deg, rgba(120,210,150,.20), rgba(120,210,150,.20)), var(--cardbase) !important;
+}
+.card.card-tercos{
+  background: linear-gradient(0deg, rgba(255,220,50,.30), rgba(255,220,50,.30)), var(--cardbase) !important;
+}
+.card.card-movimentos{
+  background: linear-gradient(0deg, rgba(255,150,70,.30), rgba(255,150,70,.30)), var(--cardbase) !important;
+}
+
+/* Alto contraste: mantém preto */
+html.hc .card.card-planos,
+html.hc .card.card-angulos,
+html.hc .card.card-tercos,
+html.hc .card.card-movimentos{
+  background:#000 !important;
+}
+
+
+/* Esquema (Planos): mostrar imagem inteira sem cortar */
+.mediaFrame--contain img{ object-fit: contain; }

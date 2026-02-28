@@ -9,7 +9,7 @@
  <meta name="theme-color" content="#0b0f17" />
  <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body class="theme-dark">
 
 <a class="skip-link" href="#conteudo">Saltar para o conteúdo principal</a>
 <header>
@@ -20,8 +20,7 @@
  <img src="assets/img/logo.png" alt="Logótipo do site: fotografia e vídeo" />
  <span class="title">
  <strong>Técnicas de Fotografia & Vídeo</strong>
- <span>12.º ano - Aplicações Informáticas</span>
-          <span class="subtitle">Introdução à Multimédia</span>
+<span class="subtitle">Introdução à Multimédia</span>
  </span>
  </a>
 
@@ -29,7 +28,21 @@
  <button class="toolbtn" id="aMinus" type="button" aria-label="Diminuir tamanho do texto">A-</button>
  <button class="toolbtn" id="aPlus" type="button" aria-label="Aumentar tamanho do texto">A+</button>
  <button class="toolbtn" id="hcBtn" type="button" aria-label="Ativar alto contraste" aria-pressed="false">Contraste</button>
- </div>
+   <button class="themeSwitch" id="themeBtn" type="button" aria-pressed="false" title="Alternar tema" aria-label="Alternar entre tema claro e escuro">
+  <span class="themeIcon sun" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"></circle>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+    </svg>
+  </span>
+  <span class="themeIcon moon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
+      <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a6.5 6.5 0 1 0 11.5 11.5z"></path>
+    </svg>
+  </span>
+  <span class="themeKnob" aria-hidden="true"></span>
+</button>
+</div>
 </div>
 
  <nav id="navPanel" aria-label="Menu principal">
@@ -65,28 +78,30 @@
 
 <section class="card photoCard" aria-label="Fotografia de destaque">
   <figure class="introPhoto">
-  <img src="assets/index/13_DSC_9358.jpg" alt="Fotografia de paisagem com céu nublado e luz dourada ao fundo." loading="lazy">
+  <a class="indexPhotoLink" href="javascript:void(0)" data-full="assets/index/13_DSC_9358.jpg">
+    <img src="assets/index/13_DSC_9358.jpg" alt="Fotografia de paisagem com céu nublado e luz dourada ao fundo." loading="lazy">
+  </a>
 </figure>
 </section>
 
 <div class="grid" aria-label="Atalhos por tema">
- <section class="card">
+ <section class="card card-planos">
  <h2>Planos</h2>
  <p>O que mostrar e quanto mostrar: do Plano Geral ao Pormenor. Inclui exemplos e mini‑tarefas.</p>
  <a class="more" href="planos.html">Abrir Planos</a>
  </section>
- <section class="card">
+ <section class="card card-angulos">
  <h2>Ângulos</h2>
  <p>De onde “olhamos”: ao nível dos olhos, picado, contrapicado, zenital, nadir e dutch tilt.</p>
  <a class="more" href="angulos.html">Abrir Ângulos</a>
  </section>
- <section class="card">
+ <section class="card card-tercos">
  <h2>Regra dos Terços</h2>
  <p>Grelha 3×3 para posicionar o assunto e criar equilíbrio. Inclui exercícios de comparação.</p>
  <a class="more" href="tercos.html">Abrir Regra dos Terços</a>
  </section>
  
- <section class="card">
+ <section class="card card-movimentos">
   <h2>Movimentos</h2>
   <p>Pan, tilt, travelling, zoom e estabilização - quando usar, erros comuns e prática.</p>
   <a class="more" href="movimentos.html">Abrir Movimentos</a>
@@ -102,6 +117,15 @@
  </div>
 </footer>
 <script src="js/ui.js"></script>
+
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox__backdrop" data-close="1"></div>
+  <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-label="Visualização de imagem">
+    <button class="lightbox__close" type="button" aria-label="Fechar" data-close="1">×</button>
+    <img class="lightbox__img" id="lightboxImg" alt="">
+  </div>
+</div>
 
 </body>
 </html>
