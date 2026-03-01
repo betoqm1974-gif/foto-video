@@ -118,6 +118,13 @@
  applyFontScale(Math.max(90, current - 5));
  });
  }
+
+  // Aplicar marca de água também nas miniaturas da Galeria (para reduzir a possibilidade de "guardar imagem" no mobile).
+  // As miniaturas passam a ser dataURL já com marca de água aplicada.
+  if(window.__applyGalleryThumbWatermarks){
+    window.__applyGalleryThumbWatermarks();
+  }
+
  }
 
 
@@ -249,6 +256,69 @@
       return photoSrc;
     }
   };
+
+
+  const buildWatermarkedThumbDataURL = async (photoSrc) => {
+    // Reutiliza a mesma marca de água usada na popup
+    const lb = document.getElementById('lightbox');
+    const wmEl = lb ? lb.querySelector('.lightbox__wm') : null;
+    const wmSrc = (wmEl && wmEl.getAttribute('src')) ? wmEl.getAttribute('src') : 'assets/logo_betoqm_prata.png';
+
+    const [{ im: photo, usedSrc }, { im: wm }] = await Promise.all([loadImgAny(photoSrc), loadImgAny(wmSrc)]);
+
+    // Reduzir tamanho para miniaturas (evita dataURLs demasiado grandes)
+    const maxDim = 800;
+    const pw = photo.naturalWidth || photo.width;
+    const ph = photo.naturalHeight || photo.height;
+    const scaleDown = Math.min(1, maxDim / Math.max(pw, ph));
+    const cw = Math.max(1, Math.round(pw * scaleDown));
+    const ch = Math.max(1, Math.round(ph * scaleDown));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = cw;
+    canvas.height = ch;
+    const ctx = canvas.getContext('2d');
+    if(!ctx) return photoSrc;
+
+    ctx.drawImage(photo, 0, 0, cw, ch);
+
+    const scale = 0.28;
+    const wmW = Math.round(cw * scale);
+    const wmH = Math.round((wmW / (wm.naturalWidth || wm.width)) * (wm.naturalHeight || wm.height));
+    const x = Math.round((cw - wmW) / 2);
+    const y = Math.round((ch - wmH) / 2);
+    ctx.globalAlpha = 0.35;
+    ctx.drawImage(wm, x, y, wmW, wmH);
+    ctx.globalAlpha = 1;
+
+    const mime = isPng(usedSrc || photoSrc) ? 'image/png' : 'image/jpeg';
+    try{
+      return canvas.toDataURL(mime, mime === 'image/jpeg' ? 0.85 : undefined);
+    }catch(e){
+      return photoSrc;
+    }
+  };
+
+  // Expor função para a init() aplicar marca de água às miniaturas da Galeria
+  window.__applyGalleryThumbWatermarks = () => {
+    const imgs = document.querySelectorAll('.galleryGrid img');
+    if(!imgs || imgs.length === 0) return;
+    imgs.forEach((img) => {
+      if(!img || img.dataset.wmThumb === '1') return;
+      const src = img.getAttribute('src');
+      if(!src) return;
+      img.dataset.wmThumb = '1';
+      (async () => {
+        try{
+          const dataUrl = await buildWatermarkedThumbDataURL(src);
+          img.src = dataUrl;
+        }catch(e){
+          // se falhar, mantém a original
+        }
+      })();
+    });
+  };
+
 
   const openLb = async (src, alt) => {
     const lb = getLb();
