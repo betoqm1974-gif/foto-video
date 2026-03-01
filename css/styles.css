@@ -635,6 +635,23 @@ body.nav-open .menuBtn .burger span:nth-child(3){bottom:auto; top:8.5px; transfo
   object-fit:contain;
   background:#000;
 }
+
+.lightbox__wm{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  width:min(220px, 28vw);
+  max-width:50%;
+  height:auto;
+  /* marca de água: visível mas discreta */
+  opacity:.38;
+  pointer-events:none;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.25));
+}
+@media (max-width: 520px){
+  .lightbox__wm{left:50%; top:50%; transform:translate(-50%, -50%); width:min(160px, 55vw); opacity:.35;}
+}
 .lightbox__close{
   position:absolute;
   top:10px; right:10px;
