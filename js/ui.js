@@ -8,6 +8,20 @@
   e.preventDefault();
  }, { capture: true });
 
+ // Desativar copiar (Ctrl+C / Cmd+C) e impedir seleção de texto (reforçado por CSS)
+ document.addEventListener('copy', (e) => {
+  e.preventDefault();
+ }, { capture: true });
+
+ document.addEventListener('keydown', (e) => {
+  const key = (e.key || '').toLowerCase();
+  const isCopy = (key === 'c') && (e.ctrlKey || e.metaKey);
+  if(isCopy){
+    e.preventDefault();
+  }
+ }, { capture: true });
+
+
  // Evitar arrastar imagens (reduz "drag to save")
  document.addEventListener('dragstart', (e) => {
   const t = e.target;

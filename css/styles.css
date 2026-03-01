@@ -154,11 +154,34 @@ main{
 }
 .card{
  grid-column: span 6;
+ position: relative;
  border:1px solid rgba(255,255,255,.10);
  border-radius: var(--radius);
  background: var(--panel2);
  box-shadow: var(--shadow);
  padding: 16px;
+}
+
+/* Index: cartões clicáveis (link em overlay) */
+.cardOverlay{
+ position:absolute;
+ inset:0;
+ z-index:1;
+ border-radius: inherit;
+ text-decoration:none;
+}
+.card > :not(.cardOverlay){
+ position:relative;
+ z-index:2;
+}
+.cardOverlay:focus-visible{
+ outline: 3px solid rgba(244,181,70,.9);
+ outline-offset: 3px;
+}
+
+/* No mobile, no index, escondemos o link "Abrir…" (o cartão continua clicável) */
+@media (max-width: 720px){
+ .page-index .grid .card a.more{display:none;}
 }
 .card h2{margin:0 0 8px; font-size:1.15rem}
 .card p{margin:0; color:var(--muted)}
@@ -1201,4 +1224,17 @@ header, footer{
     -webkit-user-select: none;
     user-select: none;
   }
+}
+
+/* =====================
+   Bloquear seleção de texto (pedido do utilizador)
+   Nota: pode afetar acessibilidade e usabilidade.
+   ===================== */
+html, body{
+  -webkit-user-select: none;
+  user-select: none;
+}
+input, textarea, select, button, [contenteditable="true"]{
+  -webkit-user-select: text;
+  user-select: text;
 }
