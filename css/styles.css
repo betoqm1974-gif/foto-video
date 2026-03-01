@@ -1161,3 +1161,14 @@ header, footer{
   max-height: none !important;
   object-fit: contain !important;
 }
+
+
+/* Ângulos - exemplos (foto por cima do vídeo) */
+.examples-grid{ display:grid; gap:18px; }
+.example-card{
+  border-radius:18px;
+  padding:18px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+.stack{ display:grid; gap:14px; }
