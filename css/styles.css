@@ -1189,3 +1189,16 @@ header, footer{
   border: 1px solid var(--border);
 }
 .stack{ display:grid; gap:14px; }
+
+/* =====================
+   Mobile: reduzir opções de "Guardar imagem"
+   (nota: não é uma proteção absoluta em todos os browsers)
+   ===================== */
+@media (max-width: 900px){
+  .galleryGrid img,
+  #lightboxImg{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}

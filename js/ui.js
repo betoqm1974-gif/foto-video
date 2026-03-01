@@ -166,8 +166,18 @@
     if(ext) exts.push(ext);
     ['.jpg','.JPG','.jpeg','.JPEG','.png','.PNG','.webp','.WEBP'].forEach(e => { if(!exts.includes(e)) exts.push(e); });
 
-    const names = [name];
-    if(name.startsWith('_')) names.push(name.slice(1));
+    // Nomes: original, sem _ inicial, e variações de caixa (útil em servers case-sensitive)
+    const names = [];
+    const pushName = (nm) => {
+      if(!nm) return;
+      if(!names.includes(nm)) names.push(nm);
+      const lower = nm.toLowerCase();
+      const upper = nm.toUpperCase();
+      if(!names.includes(lower)) names.push(lower);
+      if(!names.includes(upper)) names.push(upper);
+    };
+    pushName(name);
+    if(name.startsWith('_')) pushName(name.slice(1));
 
     const out = [src];
     names.forEach(nm => {
