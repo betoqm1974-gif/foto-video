@@ -1260,3 +1260,26 @@ input, textarea, select, button, [contenteditable="true"]{
   -webkit-user-select: text;
   user-select: text;
 }
+
+
+/* QR Code modal */
+#qrbox .lightbox__dialog{
+  max-width:min(520px, 92vw);
+  max-height:none;
+  margin:12vh auto 0;
+  padding:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.14);
+}
+#qrbox .lightbox__img{
+  width:min(280px, 70vw);
+  height:auto;
+  max-height:none;
+  aspect-ratio:1 / 1;
+  object-fit:contain;
+  border-radius:12px;
+  background:#fff;
+}

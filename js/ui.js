@@ -521,3 +521,59 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 })();
  
+
+
+// QR CODE BUTTON: gerar QR do URL da pagina (sem depender do botao direito)
+(function(){
+  const btn = () => document.getElementById('qrBtn');
+  const box = () => document.getElementById('qrbox');
+  const img = () => document.getElementById('qrImg');
+
+  const openQr = () => {
+    const b = box(), i = img();
+    if(!b || !i) return;
+    const url = (window.location && window.location.href) ? window.location.href : '';
+    i.src = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(url);
+    b.classList.add('is-open');
+    b.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+    const closeBtn = b.querySelector('.lightbox__close');
+    if(closeBtn) closeBtn.focus();
+  };
+
+  const closeQr = () => {
+    const b = box(), i = img();
+    if(!b || !i) return;
+    b.classList.remove('is-open');
+    b.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-open');
+    i.src = '';
+  };
+
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    const b = btn();
+    if(b && (target === b || (target && target.closest && target.closest('#qrBtn')))){
+      e.preventDefault();
+      openQr();
+      return;
+    }
+    const qb = box();
+    if(qb && qb.classList.contains('is-open')){
+      const closeTarget = target && target.getAttribute ? target.getAttribute('data-qr-close') : null;
+      if(closeTarget === '1'){
+        e.preventDefault();
+        closeQr();
+      }
+    }
+  }, { capture: true });
+
+  document.addEventListener('keydown', (e) => {
+    const qb = box();
+    if(!qb || !qb.classList.contains('is-open')) return;
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      closeQr();
+    }
+  });
+})();
