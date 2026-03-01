@@ -2,6 +2,20 @@
  const root = document.documentElement;
  const body = document.body;
 
+ // Desativar botão direito do rato em todas as páginas
+ // (nota: não é uma proteção absoluta, mas evita o menu contextual comum)
+ document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+ }, { capture: true });
+
+ // Evitar arrastar imagens (reduz "drag to save")
+ document.addEventListener('dragstart', (e) => {
+  const t = e.target;
+  if(t && t.tagName && t.tagName.toLowerCase() === 'img'){
+    e.preventDefault();
+  }
+ }, { capture: true });
+
  const get = (k, d=null) => {
  try { const v = localStorage.getItem(k); return v===null? d : v; } catch(e){ return d; }
  };
@@ -123,11 +137,129 @@
     if(lb) lb.classList.remove('is-zoomed');
   };
 
-  const openLb = (src, alt) => {
+  const isPng = (url) => (url || '').toLowerCase().split('?')[0].endsWith('.png');
+
+  const splitUrl = (src) => {
+    const out = { base: src || '', query: '', hash: '' };
+    if(!src) return out;
+    let s = src;
+    const hashIdx = s.indexOf('#');
+    if(hashIdx >= 0){ out.hash = s.slice(hashIdx); s = s.slice(0, hashIdx); }
+    const qIdx = s.indexOf('?');
+    if(qIdx >= 0){ out.query = s.slice(qIdx); s = s.slice(0, qIdx); }
+    out.base = s;
+    return out;
+  };
+
+  const buildCandidates = (src) => {
+    const parts = splitUrl(src);
+    const base = parts.base;
+    const query = parts.query + parts.hash;
+    const lastSlash = base.lastIndexOf('/');
+    const dir = lastSlash >= 0 ? base.slice(0, lastSlash+1) : '';
+    const file = lastSlash >= 0 ? base.slice(lastSlash+1) : base;
+    const dot = file.lastIndexOf('.');
+    const name = dot >= 0 ? file.slice(0, dot) : file;
+    const ext = dot >= 0 ? file.slice(dot) : '';
+
+    const exts = [];
+    if(ext) exts.push(ext);
+    ['.jpg','.JPG','.jpeg','.JPEG','.png','.PNG','.webp','.WEBP'].forEach(e => { if(!exts.includes(e)) exts.push(e); });
+
+    const names = [name];
+    if(name.startsWith('_')) names.push(name.slice(1));
+
+    const out = [src];
+    names.forEach(nm => {
+      exts.forEach(ex => {
+        const cand = dir + nm + ex + query;
+        if(!out.includes(cand)) out.push(cand);
+      });
+    });
+    return out;
+  };
+
+  const loadImgAny = async (src) => {
+    const cands = buildCandidates(src);
+    let lastErr = null;
+    for(const cand of cands){
+      try{
+        // eslint-disable-next-line no-await-in-loop
+        const im = await loadImg(cand);
+        return { im, usedSrc: cand };
+      }catch(e){
+        lastErr = e;
+      }
+    }
+    throw lastErr || new Error('Falha ao carregar imagem.');
+  };
+
+  const loadImg = (src) => new Promise((resolve, reject) => {
+    const im = new Image();
+    // Tenta evitar problemas de canvas tainted quando servido por HTTP(S)
+    im.crossOrigin = 'anonymous';
+    im.onload = () => resolve(im);
+    im.onerror = reject;
+    im.src = src;
+  });
+
+  const buildWatermarkedDataURL = async (photoSrc) => {
+    const lb = document.getElementById('lightbox');
+    const wmEl = lb ? lb.querySelector('.lightbox__wm') : null;
+    const wmSrc = wmEl ? wmEl.getAttribute('src') : null;
+    if(!wmSrc) return photoSrc;
+
+    const [{ im: photo, usedSrc }, { im: wm }] = await Promise.all([loadImgAny(photoSrc), loadImgAny(wmSrc)]);
+    // Nota: usedSrc pode ter sido ajustado (extensão/maiúsculas) para compatibilidade em servidores case-sensitive.
+
+    const canvas = document.createElement('canvas');
+    canvas.width = photo.naturalWidth || photo.width;
+    canvas.height = photo.naturalHeight || photo.height;
+    const ctx = canvas.getContext('2d');
+    if(!ctx) return photoSrc;
+
+    // Foto
+    ctx.drawImage(photo, 0, 0, canvas.width, canvas.height);
+
+    // Marca de água ao centro, mais pequena e semi-transparente
+    const scale = 0.28; // ~28% da largura
+    const wmW = Math.round(canvas.width * scale);
+    const wmH = Math.round((wmW / (wm.naturalWidth || wm.width)) * (wm.naturalHeight || wm.height));
+    const x = Math.round((canvas.width - wmW) / 2);
+    const y = Math.round((canvas.height - wmH) / 2);
+    ctx.globalAlpha = 0.35; // menos transparente do que o fix_20, mais do que o início
+    ctx.drawImage(wm, x, y, wmW, wmH);
+    ctx.globalAlpha = 1;
+
+    // Exportar
+    const mime = isPng(usedSrc || photoSrc) ? 'image/png' : 'image/jpeg';
+    try{
+      return canvas.toDataURL(mime, mime === 'image/jpeg' ? 0.92 : undefined);
+    }catch(e){
+      return photoSrc;
+    }
+  };
+
+  const openLb = async (src, alt) => {
     const lb = getLb();
     if(!lb) return;
-    lb.lightboxImg.src = src;
+
+    const wm = lb.lightbox.querySelector('.lightbox__wm');
+
+    // Por defeito, usar uma versão com marca de água (dataURL) na popup.
+    // Assim, mesmo que o utilizador abra a imagem da popup numa nova janela,
+    // a imagem visível continua a ter a marca de água.
     lb.lightboxImg.alt = alt || 'Imagem';
+    lb.lightboxImg.src = '';
+    try{
+      const watermarked = await buildWatermarkedDataURL(src);
+      lb.lightboxImg.src = watermarked;
+      // Evita dupla marca de água (overlay + marca aplicada no próprio ficheiro)
+      if(wm) wm.style.display = 'none';
+    }catch(e){
+      lb.lightboxImg.src = src;
+      if(wm) wm.style.display = '';
+    }
     lb.lightbox.classList.add('is-open');
     lb.lightbox.setAttribute('aria-hidden','false');
     document.body.classList.add('modal-open');
@@ -143,6 +275,8 @@
     lb.lightbox.setAttribute('aria-hidden','true');
     document.body.classList.remove('modal-open');
     lb.lightboxImg.src = '';
+    const wm = lb.lightbox.querySelector('.lightbox__wm');
+    if(wm) wm.style.display = '';
     resetZoom();
   };
 
@@ -151,6 +285,27 @@
     if(!lb) return;
     lb.classList.toggle('is-zoomed');
   };
+
+
+  // Fallback para ficheiros em servidores case-sensitive (GitHub Pages):
+  // se uma miniatura falhar, tenta variações comuns (.JPG/.JPEG e remoção de _ inicial).
+  const attachImgFallback = (img) => {
+    if(!img || img.dataset.fallbackAttached) return;
+    img.dataset.fallbackAttached = '1';
+    img.addEventListener('error', () => {
+      const list = buildCandidates(img.getAttribute('src'));
+      const i = parseInt(img.dataset.fallbackIndex || '0', 10);
+      const next = list[i+1];
+      if(next){
+        img.dataset.fallbackIndex = String(i+1);
+        img.src = next;
+      }
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('img[src*="assets/galeria/"]').forEach(attachImgFallback);
+  });
 
   document.addEventListener('click', (e) => {
     // 1) abrir lightbox a partir de links com data-full
