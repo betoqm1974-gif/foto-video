@@ -2,13 +2,13 @@
  const root = document.documentElement;
  const body = document.body;
 
- // Desativar botão direito do rato em todas as páginas
- // (nota: não é uma proteção absoluta, mas evita o menu contextual comum)
+ // Desativar botÃ£o direito do rato em todas as pÃ¡ginas
+ // (nota: nÃ£o Ã© uma proteÃ§Ã£o absoluta, mas evita o menu contextual comum)
  document.addEventListener('contextmenu', (e) => {
   e.preventDefault();
  }, { capture: true });
 
- // Desativar copiar (Ctrl+C / Cmd+C) e impedir sele��o de texto (refor�ado por CSS)
+ // Desativar copiar (Ctrl+C / Cmd+C) e impedir seleção de texto (reforçado por CSS)
  document.addEventListener('copy', (e) => {
   e.preventDefault();
  }, { capture: true });
@@ -133,11 +133,20 @@
  });
  }
 
-  // Aplicar marca de água também nas miniaturas da Galeria (para reduzir a possibilidade de "guardar imagem" no mobile).
-  // As miniaturas passam a ser dataURL já com marca de água aplicada.
+  // Aplicar marca de Ã¡gua tambÃ©m nas miniaturas da Galeria (para reduzir a possibilidade de "guardar imagem" no mobile).
+  // As miniaturas passam a ser dataURL jÃ¡ com marca de Ã¡gua aplicada.
   if(window.__applyGalleryThumbWatermarks){
     window.__applyGalleryThumbWatermarks();
   }
+
+  // Em mobile (ecr� t�til / pointer coarse), aplicar marca de �gua tamb�m � foto de destaque do index.
+  try{
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0);
+    const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    if((isTouch || isCoarse) && window.__applyIndexIntroWatermark){
+      window.__applyIndexIntroWatermark();
+    }
+  }catch(e){}
 
  }
 
@@ -187,7 +196,7 @@
     if(ext) exts.push(ext);
     ['.jpg','.JPG','.jpeg','.JPEG','.png','.PNG','.webp','.WEBP'].forEach(e => { if(!exts.includes(e)) exts.push(e); });
 
-    // Nomes: original, sem _ inicial, e variações de caixa (útil em servers case-sensitive)
+    // Nomes: original, sem _ inicial, e variaÃ§Ãµes de caixa (Ãºtil em servers case-sensitive)
     const names = [];
     const pushName = (nm) => {
       if(!nm) return;
@@ -241,7 +250,7 @@
     if(!wmSrc) return photoSrc;
 
     const [{ im: photo, usedSrc }, { im: wm }] = await Promise.all([loadImgAny(photoSrc), loadImgAny(wmSrc)]);
-    // Nota: usedSrc pode ter sido ajustado (extensão/maiúsculas) para compatibilidade em servidores case-sensitive.
+    // Nota: usedSrc pode ter sido ajustado (extensÃ£o/maiÃºsculas) para compatibilidade em servidores case-sensitive.
 
     const canvas = document.createElement('canvas');
     canvas.width = photo.naturalWidth || photo.width;
@@ -252,13 +261,13 @@
     // Foto
     ctx.drawImage(photo, 0, 0, canvas.width, canvas.height);
 
-    // Marca de água ao centro, mais pequena e semi-transparente
+    // Marca de Ã¡gua ao centro, mais pequena e semi-transparente
     const scale = 0.28; // ~28% da largura
     const wmW = Math.round(canvas.width * scale);
     const wmH = Math.round((wmW / (wm.naturalWidth || wm.width)) * (wm.naturalHeight || wm.height));
     const x = Math.round((canvas.width - wmW) / 2);
     const y = Math.round((canvas.height - wmH) / 2);
-    ctx.globalAlpha = 0.35; // menos transparente do que o fix_20, mais do que o início
+    ctx.globalAlpha = 0.35; // menos transparente do que o fix_20, mais do que o inÃ­cio
     ctx.drawImage(wm, x, y, wmW, wmH);
     ctx.globalAlpha = 1;
 
@@ -273,7 +282,7 @@
 
 
   const buildWatermarkedThumbDataURL = async (photoSrc) => {
-    // Reutiliza a mesma marca de água usada na popup
+    // Reutiliza a mesma marca de Ã¡gua usada na popup
     const lb = document.getElementById('lightbox');
     const wmEl = lb ? lb.querySelector('.lightbox__wm') : null;
     const wmSrc = (wmEl && wmEl.getAttribute('src')) ? wmEl.getAttribute('src') : 'assets/logo_betoqm_prata.png';
@@ -313,24 +322,57 @@
     }
   };
 
-  // Expor função para a init() aplicar marca de água às miniaturas da Galeria
+  // Expor funÃ§Ã£o para a init() aplicar marca de Ã¡gua Ã s miniaturas da Galeria
   window.__applyGalleryThumbWatermarks = () => {
     const imgs = document.querySelectorAll('.galleryGrid img');
     if(!imgs || imgs.length === 0) return;
+
+    // Importante: aplicar a marca de �gua s� depois da imagem carregar.
+    // Assim, se o src original falhar e o fallback trocar a extens�o/nome,
+    // a miniatura n�o fica "presa" num estado de erro.
     imgs.forEach((img) => {
-      if(!img || img.dataset.wmThumb === '1') return;
-      const src = img.getAttribute('src');
-      if(!src) return;
-      img.dataset.wmThumb = '1';
-      (async () => {
+      if(!img || img.dataset.wmThumbHooked === '1') return;
+      img.dataset.wmThumbHooked = '1';
+
+      const apply = async () => {
         try{
-          const dataUrl = await buildWatermarkedThumbDataURL(src);
+          const currentSrc = img.getAttribute('src') || '';
+          if(!currentSrc || currentSrc.startsWith('data:')) return;
+          if(img.dataset.wmThumbApplied === '1') return;
+
+          const dataUrl = await buildWatermarkedThumbDataURL(currentSrc);
+          img.dataset.wmThumbApplied = '1';
           img.src = dataUrl;
         }catch(e){
-          // se falhar, mantém a original
+          // Se falhar (ex.: ficheiro ainda n�o encontrado), deixa o fallback atuar.
+          // Quando a imagem carregar, o evento 'load' volta a chamar apply().
         }
-      })();
+      };
+
+      img.addEventListener('load', apply);
+
+      // Se j� estiver em cache e carregada, tenta j�.
+      if(img.complete && img.naturalWidth > 0) apply();
     });
+  };
+
+  // Expor função para aplicar marca de água também à foto de destaque do index (útil em mobile).
+  // Isto não impede totalmente downloads, mas garante que, se guardarem a imagem visível,
+  // esta já inclui a marca de água.
+  window.__applyIndexIntroWatermark = () => {
+    const img = document.querySelector('.introPhoto img');
+    if(!img || img.dataset.wmIntro === '1') return;
+    const src = img.getAttribute('src');
+    if(!src || src.startsWith('data:')) return;
+    img.dataset.wmIntro = '1';
+    (async () => {
+      try{
+        const dataUrl = await buildWatermarkedDataURL(src);
+        img.src = dataUrl;
+      }catch(e){
+        // se falhar, mantém a original
+      }
+    })();
   };
 
 
@@ -340,15 +382,15 @@
 
     const wm = lb.lightbox.querySelector('.lightbox__wm');
 
-    // Por defeito, usar uma versão com marca de água (dataURL) na popup.
+    // Por defeito, usar uma versÃ£o com marca de Ã¡gua (dataURL) na popup.
     // Assim, mesmo que o utilizador abra a imagem da popup numa nova janela,
-    // a imagem visível continua a ter a marca de água.
+    // a imagem visÃ­vel continua a ter a marca de Ã¡gua.
     lb.lightboxImg.alt = alt || 'Imagem';
     lb.lightboxImg.src = '';
     try{
       const watermarked = await buildWatermarkedDataURL(src);
       lb.lightboxImg.src = watermarked;
-      // Evita dupla marca de água (overlay + marca aplicada no próprio ficheiro)
+      // Evita dupla marca de Ã¡gua (overlay + marca aplicada no prÃ³prio ficheiro)
       if(wm) wm.style.display = 'none';
     }catch(e){
       lb.lightboxImg.src = src;
@@ -382,7 +424,7 @@
 
 
   // Fallback para ficheiros em servidores case-sensitive (GitHub Pages):
-  // se uma miniatura falhar, tenta variações comuns (.JPG/.JPEG e remoção de _ inicial).
+  // se uma miniatura falhar, tenta variaÃ§Ãµes comuns (.JPG/.JPEG e remoÃ§Ã£o de _ inicial).
   const attachImgFallback = (img) => {
     if(!img || img.dataset.fallbackAttached) return;
     img.dataset.fallbackAttached = '1';
@@ -446,4 +488,36 @@
 
 
 document.addEventListener('DOMContentLoaded', init);
+
+// Index: em alguns browsers mobile, um <a> vazio (overlay) pode nao apanhar o toque.
+// Este fallback garante que tocar no cartao abre a respetiva pagina.
+document.addEventListener('DOMContentLoaded', () => {
+  if(!document.body || !document.body.classList.contains('page-index')) return;
+  document.querySelectorAll('.grid .card').forEach((card) => {
+    const overlay = card.querySelector('a.cardOverlay[href]');
+    if(!overlay) return;
+    const href = overlay.getAttribute('href');
+    if(!href) return;
+
+    if(!card.hasAttribute('tabindex')) card.tabIndex = 0;
+    card.setAttribute('role','link');
+
+    const go = () => { window.location.href = href; };
+
+    card.addEventListener('click', (e) => {
+      const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if(a && a !== overlay) return;
+      e.preventDefault();
+      go();
+    });
+
+    card.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        go();
+      }
+    });
+  });
+});
 })();
+ 
