@@ -36,10 +36,10 @@ body{
   top: 0;
   transform: translate(calc(var(--mx, -9999px) - 50%), calc(var(--my, -9999px) - 50%));
   pointer-events: none;
-  z-index: 1; /* acima do header/rodapé, sem bloquear cliques */
+  /* acima de tudo (inclui popups), sem bloquear cliques */
+  z-index: 10001;
   mix-blend-mode: screen;
 }
-body.modal-open .cursor-glow{ opacity: 0; }
 
 /* Desktop: um pouco menor e suave */
 @media (hover: hover) and (pointer: fine){
@@ -545,6 +545,23 @@ footer{
   .navlist a[aria-current="page"]::after{
     background: #f86002;
     background-position: 0% 0;
+  }
+}
+
+/* Desktop (tema claro): a barra em repouso (antes branca) passa a cinzenta */
+@media (min-width: 821px){
+  body.theme-light .navlist a::after{
+    background:#9a9a9a;
+  }
+  body.theme-light .navlist a:hover::after,
+  body.theme-light .navlist a:focus-visible::after{
+    background: linear-gradient(90deg, #9a9a9a 0%, #9a9a9a 35%, #f86002 70%, #f86002 100%);
+  }
+
+  /* Tema claro: ativo mantém laranja */
+  body.theme-light .navlist a[aria-current="page"]::after{
+    background:#f86002;
+    background-position:0% 0;
   }
 }
 
