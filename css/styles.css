@@ -448,6 +448,21 @@ footer{
   #navPanel{margin-top:8px}
 }
 
+/* Mobile: link ativo a laranja */
+@media (max-width: 820px){
+  .navlist a[aria-current="page"]{
+    color:#f86002;
+  }
+}
+
+/* Mobile (com rato/trackpad): ao passar o rato, link a laranja */
+@media (max-width: 820px) and (hover: hover){
+  .navlist a:hover,
+  .navlist a:focus-visible{
+    color:#f86002;
+  }
+}
+
 /* Desktop: efeito de barra branca no menu */
 @media (min-width: 821px){
   .navlist a{position:relative}
@@ -458,15 +473,31 @@ footer{
     bottom:4px;
     height:3px;
     border-radius:999px;
-    background: var(--menubar);
+    /* Em repouso: barra branca */
+    background: #ffffff;
+    background-size: 200% 100%;
+    background-position: 0% 0;
     transform:scaleX(0);
     transform-origin:left;
-    transition:transform .18s ease;
+    transition:transform .18s ease, background-position .45s ease;
   }
   .navlist a:hover::after,
   .navlist a:focus-visible::after,
   .navlist a[aria-current="page"]::after{
     transform:scaleX(1);
+  }
+
+  /* Ao passar o rato: degradê (branco → laranja) em movimento */
+  .navlist a:hover::after,
+  .navlist a:focus-visible::after{
+    background: linear-gradient(90deg, #ffffff 0%, #ffffff 35%, #f86002 70%, #f86002 100%);
+    background-position: 100% 0;
+  }
+
+  /* Clicado/ativo: barra laranja */
+  .navlist a[aria-current="page"]::after{
+    background: #f86002;
+    background-position: 0% 0;
   }
 }
 
@@ -477,9 +508,9 @@ footer{
   box-shadow: none !important;
 }
 
-//* Botão hambúrguer (mobile) */
+/* Botão hambúrguer (mobile) */
 .menuBtn .menuLabel{display:none}
- (max-width: 820px){
+@media (max-width: 820px){
   .menuBtn{min-width:44px; justify-content:center; gap:10px}
   .menuBtn .menuLabel{display:inline-block; font-weight:800; letter-spacing:.08em; font-size:.85rem; line-height:1}
 }
