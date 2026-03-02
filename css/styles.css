@@ -51,6 +51,12 @@ body.modal-open .cursor-glow{ opacity: 0; }
     background: radial-gradient(circle, rgba(255,255,255,.42) 0%, rgba(255,255,255,0) 70%);
     transition: opacity 180ms ease;
   }
+
+  /* Versão clara: inverte o brilho (escurece ligeiramente em vez de aclarar) */
+  body.theme-light .cursor-glow{
+    mix-blend-mode: multiply;
+    background: radial-gradient(circle, rgba(0,0,0,.28) 0%, rgba(0,0,0,0) 72%);
+  }
 }
 
 /* Mobile (pointer coarse): bem mais pequeno e visível */
@@ -61,6 +67,12 @@ body.modal-open .cursor-glow{ opacity: 0; }
     opacity: .52;
     filter: blur(18px);
     background: radial-gradient(circle, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 72%);
+  }
+
+  /* Versão clara (mobile): inverte o brilho para ficar visível em fundo claro */
+  body.theme-light .cursor-glow{
+    mix-blend-mode: multiply;
+    background: radial-gradient(circle, rgba(0,0,0,.34) 0%, rgba(0,0,0,0) 74%);
   }
 }
 
