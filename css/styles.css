@@ -29,6 +29,41 @@ body{
  line-height:1.55;
 }
 
+/* Efeito "spotlight" (círculo desfocado) que segue o rato/toque */
+.cursor-glow{
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform: translate(calc(var(--mx, -9999px) - 50%), calc(var(--my, -9999px) - 50%));
+  pointer-events: none;
+  z-index: 1; /* acima do header/rodapé, sem bloquear cliques */
+  mix-blend-mode: screen;
+}
+body.modal-open .cursor-glow{ opacity: 0; }
+
+/* Desktop: um pouco menor e suave */
+@media (hover: hover) and (pointer: fine){
+  .cursor-glow{
+    width: 360px;
+    height: 360px;
+    opacity: .34;
+    filter: blur(24px);
+    background: radial-gradient(circle, rgba(255,255,255,.42) 0%, rgba(255,255,255,0) 70%);
+    transition: opacity 180ms ease;
+  }
+}
+
+/* Mobile (pointer coarse): bem mais pequeno e visível */
+@media (hover: none) and (pointer: coarse){
+  .cursor-glow{
+    width: 200px;
+    height: 200px;
+    opacity: .52;
+    filter: blur(18px);
+    background: radial-gradient(circle, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 72%);
+  }
+}
+
 a{color:inherit}
 a:hover{text-decoration:none}
 a:focus, button:focus, input:focus{outline: 3px solid var(--focus); outline-offset: 3px}
