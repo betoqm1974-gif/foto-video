@@ -6,8 +6,10 @@
  <title>Galeria - Técnicas de Fotografia &amp; Vídeo</title>
  <link rel="icon" href="favicon.ico" />
  <link rel="manifest" href="manifest.webmanifest" />
- <meta name="theme-color" content="#0b0f17" />
- <link rel="preload" as="image" href="assets/img/bg.jpeg" />
+ <meta name="color-scheme" content="dark light" />
+ <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f2f2" />
+ <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f17" />
+<link rel="preload" as="image" href="assets/img/bg.jpeg" />
 <script>
   // __setInitialTheme: aplica classes no <html> antes do CSS carregar (evita "flash" ao navegar)
   (function(){
@@ -20,15 +22,15 @@
       root.classList.remove('theme-light','theme-dark');
       root.classList.add('theme-' + t);
       // Ajustar a cor da barra do browser no mobile para evitar "flash" ao navegar
-      var meta = document.querySelector('meta[name="theme-color"]');
-      if(meta) meta.setAttribute('content', t === 'light' ? '#f2f2f2' : '#0b0f17');
+      var metas = document.querySelectorAll('meta[name="theme-color"]');
+      metas && metas.forEach(function(m){ m.setAttribute('content', t === 'light' ? '#f2f2f2' : '#0b0f17'); });
       var hc = localStorage.getItem('highContrast');
       if(hc === '1') root.classList.add("hc");
     }catch(e){}
   })();
  </script>
  <script>window.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.documentElement.removeAttribute("data-preload");});});</script>
- <style>html{background:#0f0f10;}html.theme-light{background:#f2f2f2;}body{background:transparent;}</style>
+ <style>html,body{background:#0f0f10;}html.theme-light,html.theme-light body{background:#f2f2f2;}html[data-preload] *,html[data-preload] *::before,html[data-preload] *::after{transition:none!important;animation:none!important;}</style>
 <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body class=""><a class="skip-link" href="#conteudo">Saltar para o conteúdo principal</a>
@@ -111,36 +113,36 @@
 
   <section class="section">
     <div class="galleryGrid">
-            <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/01_cascata.jpg"><img src="assets/galeria/01_cascata.jpg" alt="Fotografia da galeria: 01_cascata.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/01_girasol.jpg"><img src="assets/galeria/01_girasol.jpg" alt="Fotografia da galeria: 01_girasol.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/01_rendas.jpg"><img src="assets/galeria/01_rendas.jpg" alt="Fotografia da galeria: 01_rendas.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/03_DSC_0160.jpg"><img src="assets/galeria/03_DSC_0160.jpg" alt="Fotografia da galeria: 03_DSC_0160.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/04_DSC_0046-2.jpg"><img src="assets/galeria/04_DSC_0046-2.jpg" alt="Fotografia da galeria: 04_DSC_0046-2.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/05_DSC_6618-Edit_copia.jpeg"><img src="assets/galeria/05_DSC_6618-Edit_copia.jpeg" alt="Fotografia da galeria: 05_DSC_6618-Edit_copia.jpeg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/06_DSC_8243-Editar-3-2.jpeg"><img src="assets/galeria/06_DSC_8243-Editar-3-2.jpeg" alt="Fotografia da galeria: 06_DSC_8243-Editar-3-2.jpeg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/08_descida%20ao%20inferno.jpg"><img src="assets/galeria/08_descida%20ao%20inferno.jpg" alt="Fotografia da galeria: 08_descida ao inferno.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/09_DSC_5451-Editar-4.jpg"><img src="assets/galeria/09_DSC_5451-Editar-4.jpg" alt="Fotografia da galeria: 09_DSC_5451-Editar-4.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/11_DSC_5383-Edit-2.jpeg"><img src="assets/galeria/11_DSC_5383-Edit-2.jpeg" alt="Fotografia da galeria: 11_DSC_5383-Edit-2.jpeg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/12_DSC_4833-Edit-2.jpeg"><img src="assets/galeria/12_DSC_4833-Edit-2.jpeg" alt="Fotografia da galeria: 12_DSC_4833-Edit-2.jpeg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/15_DSC3628_final%20c%C3%B3pia-Editar.jpg"><img src="assets/galeria/15_DSC3628_final%20c%C3%B3pia-Editar.jpg" alt="Fotografia da galeria: 15_DSC3628_final cópia-Editar.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/16_olho_de_gato.jpg"><img src="assets/galeria/16_olho_de_gato.jpg" alt="Fotografia da galeria: 16_olho_de_gato.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0063-Editar.jpg"><img src="assets/galeria/DSC_0063-Editar.jpg" alt="Fotografia da galeria: DSC_0063-Editar.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0145-Editar.jpg"><img src="assets/galeria/DSC_0145-Editar.jpg" alt="Fotografia da galeria: DSC_0145-Editar.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0354-Editar.jpg"><img src="assets/galeria/DSC_0354-Editar.jpg" alt="Fotografia da galeria: DSC_0354-Editar.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0415.jpg"><img src="assets/galeria/DSC_0415.jpg" alt="Fotografia da galeria: DSC_0415.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0458-Editar.jpg"><img src="assets/galeria/DSC_0458-Editar.jpg" alt="Fotografia da galeria: DSC_0458-Editar.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0676pb-Editar.jpg"><img src="assets/galeria/DSC_0676pb-Editar.jpg" alt="Fotografia da galeria: DSC_0676pb-Editar.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_5103-Editar.jpg"><img src="assets/galeria/DSC_5103-Editar.jpg" alt="Fotografia da galeria: DSC_5103-Editar.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_5208-Edit%20c%C3%B3pia3.jpg"><img src="assets/galeria/DSC_5208-Edit%20c%C3%B3pia3.jpg" alt="Fotografia da galeria: DSC_5208-Edit cópia3.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_5449-Editar-c%C3%B3pia-3-2.jpg"><img src="assets/galeria/DSC_5449-Editar-c%C3%B3pia-3-2.jpg" alt="Fotografia da galeria: DSC_5449-Editar-cópia-3-2.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_8959%20c%C3%B3pia4.jpg"><img src="assets/galeria/DSC_8959%20c%C3%B3pia4.jpg" alt="Fotografia da galeria: DSC_8959 cópia4.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_9223-Editar-2.jpg"><img src="assets/galeria/DSC_9223-Editar-2.jpg" alt="Fotografia da galeria: DSC_9223-Editar-2.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_9239-Editar-2.jpg"><img src="assets/galeria/DSC_9239-Editar-2.jpg" alt="Fotografia da galeria: DSC_9239-Editar-2.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC04891-Editar-3-Editar.jpg"><img src="assets/galeria/DSC04891-Editar-3-Editar.jpg" alt="Fotografia da galeria: DSC04891-Editar-3-Editar.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/forte_final2-2.jpg"><img src="assets/galeria/forte_final2-2.jpg" alt="Fotografia da galeria: forte_final2-2.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/guardachuva_homem-3.jpg"><img src="assets/galeria/guardachuva_homem-3.jpg" alt="Fotografia da galeria: guardachuva_homem-3.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/Sem%20T%C3%ADtulo-12-2.jpg"><img src="assets/galeria/Sem%20T%C3%ADtulo-12-2.jpg" alt="Fotografia da galeria: Sem Título-12-2.jpg"></a>
-      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/temp_foto.jpg"><img src="assets/galeria/temp_foto.jpg" alt="Fotografia da galeria: temp_foto.jpg"></a>
+            <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/01_cascata.jpg"><img src="assets/galeria/01_cascata.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/01_girasol.jpg"><img src="assets/galeria/01_girasol.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/01_rendas.jpg"><img src="assets/galeria/01_rendas.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/03_DSC_0160.jpg"><img src="assets/galeria/03_DSC_0160.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/04_DSC_0046-2.jpg"><img src="assets/galeria/04_DSC_0046-2.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/05_DSC_6618-Edit_copia.jpeg"><img src="assets/galeria/05_DSC_6618-Edit_copia.jpeg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/06_DSC_8243-Editar-3-2.jpeg"><img src="assets/galeria/06_DSC_8243-Editar-3-2.jpeg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/08_descida%20ao%20inferno.jpg"><img src="assets/galeria/08_descida%20ao%20inferno.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/09_DSC_5451-Editar-4.jpg"><img src="assets/galeria/09_DSC_5451-Editar-4.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/11_DSC_5383-Edit-2.jpeg"><img src="assets/galeria/11_DSC_5383-Edit-2.jpeg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/12_DSC_4833-Edit-2.jpeg"><img src="assets/galeria/12_DSC_4833-Edit-2.jpeg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/15_DSC3628_final%20c%C3%B3pia-Editar.jpg"><img src="assets/galeria/15_DSC3628_final%20c%C3%B3pia-Editar.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/16_olho_de_gato.jpg"><img src="assets/galeria/16_olho_de_gato.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0063-Editar.jpg"><img src="assets/galeria/DSC_0063-Editar.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0145-Editar.jpg"><img src="assets/galeria/DSC_0145-Editar.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0354-Editar.jpg"><img src="assets/galeria/DSC_0354-Editar.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0415.jpg"><img src="assets/galeria/DSC_0415.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0458-Editar.jpg"><img src="assets/galeria/DSC_0458-Editar.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_0676pb-Editar.jpg"><img src="assets/galeria/DSC_0676pb-Editar.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_5103-Editar.jpg"><img src="assets/galeria/DSC_5103-Editar.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_5208-Edit%20c%C3%B3pia3.jpg"><img src="assets/galeria/DSC_5208-Edit%20c%C3%B3pia3.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_5449-Editar-c%C3%B3pia-3-2.jpg"><img src="assets/galeria/DSC_5449-Editar-c%C3%B3pia-3-2.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_8959%20c%C3%B3pia4.jpg"><img src="assets/galeria/DSC_8959%20c%C3%B3pia4.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_9223-Editar-2.jpg"><img src="assets/galeria/DSC_9223-Editar-2.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC_9239-Editar-2.jpg"><img src="assets/galeria/DSC_9239-Editar-2.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/DSC04891-Editar-3-Editar.jpg"><img src="assets/galeria/DSC04891-Editar-3-Editar.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/forte_final2-2.jpg"><img src="assets/galeria/forte_final2-2.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/guardachuva_homem-3.jpg"><img src="assets/galeria/guardachuva_homem-3.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/Sem%20T%C3%ADtulo-12-2.jpg"><img src="assets/galeria/Sem%20T%C3%ADtulo-12-2.jpg" alt="Fotografia da galeria"></a>
+      <a class="galleryItem" href="javascript:void(0)" data-full="assets/galeria/temp_foto.jpg"><img src="assets/galeria/temp_foto.jpg" alt="Fotografia da galeria"></a>
 
     </div>
   </section>

@@ -904,6 +904,11 @@ a.lightboxLink img{ cursor: zoom-in; }
   font-size:32px;
   line-height:40px;
   cursor:pointer;
+  /* garantir que o X fica sempre visível (por cima da imagem/marca d'água) */
+  z-index: 10;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .lightbox__close:focus-visible{outline:3px solid rgba(255,255,255,.85); outline-offset:2px}
 body.modal-open{overflow:hidden}
@@ -1546,3 +1551,7 @@ input, textarea, select, button, [contenteditable="true"]{
   border-radius:12px;
   background:#fff;
 }
+
+
+/* Transição suave entre fotos no lightbox */
+#lightboxImg{transition: opacity 180ms ease; will-change: opacity;}

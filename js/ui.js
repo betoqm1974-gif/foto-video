@@ -447,7 +447,36 @@
   };
 
 
-  const openLb = async (src, alt, shouldWatermark, compareSrc, compareStart, galleryCtx) => {
+  
+  // Transição suave no lightbox (evita ícone de imagem "quebrada" ao trocar o src)
+  const fadeOutIn = (imgEl, fnSwap) => new Promise((resolve) => {
+    if(!imgEl){ try{ fnSwap(); }catch(e){} resolve(); return; }
+    imgEl.style.transition = imgEl.style.transition || 'opacity 180ms ease';
+    imgEl.style.opacity = '0';
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        try{ fnSwap(); }catch(e){}
+        requestAnimationFrame(() => {
+          imgEl.style.opacity = '1';
+          resolve();
+        });
+      }, 120);
+    });
+  });
+
+  const preloadImage = (src) => new Promise((resolve) => {
+    if(!src){ resolve(false); return; }
+    const im = new Image();
+    const done = () => resolve(true);
+    im.onload = done;
+    im.onerror = done;
+    try{
+      im.src = src;
+      if(im.decode){ im.decode().then(done).catch(done); }
+    }catch(e){ done(); }
+  });
+
+const openLb = async (src, alt, shouldWatermark, compareSrc, compareStart, galleryCtx) => {
     const lb = getLb();
     if(!lb) return;
 
@@ -506,26 +535,27 @@
 
     // Marca de Ã¡gua: APENAS para as fotos da Galeria e para a foto do Index.
     // Nas restantes imagens do site, abrir a imagem original (sem marca).
-    lb.lightboxImg.alt = alt || 'Imagem';
-    lb.lightboxImg.src = '';
+    // Transição suave: não limpar src (evita ícone/alt a aparecer).
+    const desiredAlt = alt || 'Imagem';
+    let finalSrc = src;
+
     if(shouldWatermark){
       try{
-        // Preferência: aplicar marca de água “no ficheiro” (dataURL)
-        // para manter o comportamento de abrir/nova janela com marca.
-        const watermarked = await buildWatermarkedDataURL(src);
-        lb.lightboxImg.src = watermarked;
-        // Evita dupla marca de água (overlay + marca aplicada)
+        finalSrc = await buildWatermarkedDataURL(src);
         if(wm) wm.style.display = 'none';
       }catch(e){
-        // Se o canvas falhar (ex.: CORS/ficheiro local), manter a imagem original
-        // e mostrar a marca de água por overlay para não desaparecer.
-        lb.lightboxImg.src = src;
+        finalSrc = src;
         if(wm) wm.style.display = '';
       }
     }else{
-      lb.lightboxImg.src = src;
       if(wm) wm.style.display = 'none';
     }
+
+    await preloadImage(finalSrc);
+    await fadeOutIn(lb.lightboxImg, () => {
+      lb.lightboxImg.src = finalSrc;
+      lb.lightboxImg.alt = desiredAlt;
+    });
 
     // Galeria: permitir navegação anterior/seguinte no popup
     setGalleryState(galleryCtx);
@@ -554,6 +584,7 @@
     lb.lightbox.setAttribute('aria-hidden','true');
     document.documentElement.classList.remove('modal-open');
   document.body.classList.remove('modal-open');
+    lb.lightboxImg.alt = '';
     lb.lightboxImg.src = '';
     // esconder setas / limpar estados
     const navPrev = lb.lightbox.querySelector('.lightbox__nav--prev');
@@ -739,7 +770,11 @@
       if(aSrc && bSrc){
         const nextState = navBtn.classList.contains('lightbox__nav--prev') ? 'a' : 'b';
         const targetSrc = nextState === 'a' ? aSrc : bSrc;
-        if(imgEl) imgEl.src = targetSrc;
+        if(imgEl){
+          preloadImage(targetSrc).then(() => {
+            fadeOutIn(imgEl, () => { imgEl.src = targetSrc; });
+          });
+        }
         if(box.dataset) box.dataset.compareState = nextState;
         const prev = box.querySelector('.lightbox__nav--prev');
         const next = box.querySelector('.lightbox__nav--next');

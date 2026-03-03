@@ -6,8 +6,10 @@
  <title>Técnicas de Fotografia & Vídeo</title>
  <link rel="icon" href="favicon.ico" />
  <link rel="manifest" href="manifest.webmanifest" />
- <meta name="theme-color" content="#0b0f17" />
- <link rel="preload" as="image" href="assets/img/bg.jpeg" />
+ <meta name="color-scheme" content="dark light" />
+ <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f2f2" />
+ <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f17" />
+<link rel="preload" as="image" href="assets/img/bg.jpeg" />
 <script>
   // __setInitialTheme: aplica classes no <html> antes do CSS carregar (evita "flash" ao navegar)
   (function(){
@@ -20,15 +22,15 @@
       root.classList.remove('theme-light','theme-dark');
       root.classList.add('theme-' + t);
       // Ajustar a cor da barra do browser no mobile para evitar "flash" ao navegar
-      var meta = document.querySelector('meta[name="theme-color"]');
-      if(meta) meta.setAttribute('content', t === 'light' ? '#f2f2f2' : '#0b0f17');
+      var metas = document.querySelectorAll('meta[name="theme-color"]');
+      metas && metas.forEach(function(m){ m.setAttribute('content', t === 'light' ? '#f2f2f2' : '#0b0f17'); });
       var hc = localStorage.getItem('highContrast');
       if(hc === '1') root.classList.add("hc");
     }catch(e){}
   })();
  </script>
  <script>window.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.documentElement.removeAttribute("data-preload");});});</script>
- <style>html{background:#0f0f10;}html.theme-light{background:#f2f2f2;}body{background:transparent;}</style>
+ <style>html,body{background:#0f0f10;}html.theme-light,html.theme-light body{background:#f2f2f2;}html[data-preload] *,html[data-preload] *::before,html[data-preload] *::after{transition:none!important;animation:none!important;}</style>
 <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body class=""><a class="skip-link" href="#conteudo">Saltar para o conteúdo principal</a>
