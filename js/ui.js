@@ -970,24 +970,125 @@ document.addEventListener('DOMContentLoaded', () => {
 // Galeria: usar miniaturas se existirem, sem quebrar quando a pasta thumbs não existe.
 // Mantém o src "full" e só troca para o thumb quando o ficheiro confirmar load.
 (function(){
+  // Galeria: garantir que as miniaturas (thumbs) carregam SEM "saltos".
+  // Se uma thumb falhar (404 / nome com acentos / extensão), tentamos variantes e só então reportamos.
+  function stripDiacritics(s){
+    try{
+      return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    }catch(e){
+      return s;
+    }
+  }
+
+  function extVariants(url){
+    var u = (url||'');
+    var parts = u.split('?');
+    var base = parts[0];
+    var qs = parts.length>1 ? '?'+parts.slice(1).join('?') : '';
+    var m = base.match(/^(.*)\.([a-zA-Z0-9]+)$/);
+    if(!m) return [u];
+    var stem = m[1], ext = m[2];
+    var exts = [ext.toLowerCase(), ext.toUpperCase()];
+    if(ext.toLowerCase()==='jpg') exts.push('jpeg','JPEG');
+    if(ext.toLowerCase()==='jpeg') exts.push('jpg','JPG');
+    var seen = {};
+    return exts.filter(function(e){
+      if(seen[e]) return false; seen[e]=true; return true;
+    }).map(function(e){ return stem + '.' + e + qs; });
+  }
+
+  function normalizeEncode(url){
+    try{
+      var dec = decodeURI(url);
+      return encodeURI(dec);
+    }catch(e){
+      return url;
+    }
+  }
+
+  function deaccentEncode(url){
+    try{
+      var dec = decodeURI(url);
+      dec = stripDiacritics(dec);
+      return encodeURI(dec);
+    }catch(e){
+      return url;
+    }
+  }
+
+  function buildCandidates(url){
+    var list = [];
+    function push(u){
+      if(!u) return;
+      if(list.indexOf(u)===-1) list.push(u);
+    }
+    push(url);
+    push(normalizeEncode(url));
+    push(deaccentEncode(url));
+
+    var base = list.slice();
+    base.forEach(function(u){
+      extVariants(u).forEach(push);
+    });
+
+    try{
+      var dec = decodeURI(url);
+      push(dec);
+      extVariants(dec).forEach(push);
+    }catch(e){}
+    return list;
+  }
+
+  function tryLoad(candidates, idx, cb){
+    if(idx >= candidates.length){ cb(false, candidates[candidates.length-1] || ''); return; }
+    var u = candidates[idx];
+    var t = new Image();
+    t.decoding = 'async';
+    t.onload = function(){ cb(true, u); };
+    t.onerror = function(){ tryLoad(candidates, idx+1, cb); };
+    t.src = u;
+  }
+
   function run(){
     var grid = document.querySelector('.galleryGrid');
     if(!grid) return;
     var imgs = grid.querySelectorAll('img[data-thumb]');
     if(!imgs || imgs.length === 0) return;
+
     imgs.forEach(function(img){
-      var thumb = img.getAttribute('data-thumb');
+      var thumb = img.getAttribute('data-thumb') || img.getAttribute('src') || '';
       if(!thumb) return;
-      // Não trocar se já for dataURL (ex.: outros mecanismos) ou se já estamos no thumb
-      var current = img.getAttribute('src') || '';
-      if(current.startsWith('data:') || current === thumb) return;
-      var test = new Image();
-      test.decoding = 'async';
-      test.onload = function(){ img.src = thumb; };
-      // se falhar, mantém o full (não faz nada)
-      test.src = thumb;
+
+      // Grelha deve ser leve: começar SEMPRE pelo thumb
+      if((img.getAttribute('src')||'') !== thumb) img.src = thumb;
+
+      function handle(){
+        if(img.dataset.thumbFixTried === '1') return;
+        img.dataset.thumbFixTried = '1';
+
+        var cands = buildCandidates(thumb);
+        tryLoad(cands, 0, function(ok, finalUrl){
+          if(ok){
+            img.src = finalUrl;
+          }else{
+            var parent = img.closest('.galleryItem');
+            var full = parent ? parent.getAttribute('data-full') : '';
+            if(full) img.src = full;
+            try{ console.warn('[Galeria] Thumb em falta (verifica nome/extensão/acentos):', thumb); }catch(e){}
+          }
+        });
+      }
+
+      img.addEventListener('error', handle, { once: true });
+
+      // Probe silencioso (para browsers que não disparem error logo)
+      var probe = new Image();
+      probe.onload = function(){};
+      probe.onerror = function(){ handle(); };
+      probe.src = thumb;
     });
   }
+
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
   else run();
 })();
