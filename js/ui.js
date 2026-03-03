@@ -182,11 +182,6 @@
  });
  }
 
-  // Aplicar marca de ÃÂ¡gua tambÃÂ©m nas miniaturas da Galeria (para reduzir a possibilidade de "guardar imagem" no mobile).
-  // As miniaturas passam a ser dataURL jÃÂ¡ com marca de ÃÂ¡gua aplicada.
-  if(window.__applyGalleryThumbWatermarks){
-    window.__applyGalleryThumbWatermarks();
-  }
 
   // Em mobile (ecrã tátil / pointer coarse), aplicar marca de água também à foto de destaque do index.
   try{
@@ -970,3 +965,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 })();
+
+
+// Galeria: usar miniaturas se existirem, sem quebrar quando a pasta thumbs não existe.
+// Mantém o src "full" e só troca para o thumb quando o ficheiro confirmar load.
+(function(){
+  function run(){
+    var grid = document.querySelector('.galleryGrid');
+    if(!grid) return;
+    var imgs = grid.querySelectorAll('img[data-thumb]');
+    if(!imgs || imgs.length === 0) return;
+    imgs.forEach(function(img){
+      var thumb = img.getAttribute('data-thumb');
+      if(!thumb) return;
+      // Não trocar se já for dataURL (ex.: outros mecanismos) ou se já estamos no thumb
+      var current = img.getAttribute('src') || '';
+      if(current.startsWith('data:') || current === thumb) return;
+      var test = new Image();
+      test.decoding = 'async';
+      test.onload = function(){ img.src = thumb; };
+      // se falhar, mantém o full (não faz nada)
+      test.src = thumb;
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+})();
+
