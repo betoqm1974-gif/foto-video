@@ -118,6 +118,10 @@
   // Tema claro/escuro
   const themeBtn = document.getElementById("themeBtn");
   const applyTheme = (t) => {
+    // Aplicar também no <html> para evitar "flash" ao navegar entre páginas
+    const root = document.documentElement;
+    root.classList.toggle("theme-light", t === "light");
+    root.classList.toggle("theme-dark", t === "dark");
     document.body.classList.toggle("theme-light", t === "light");
     document.body.classList.toggle("theme-dark", t === "dark");
     if(themeBtn) themeBtn.setAttribute("aria-pressed", t === "light" ? "true" : "false");
@@ -205,6 +209,28 @@
     const lightboxImg = document.getElementById('lightboxImg');
     if(!lightbox || !lightboxImg) return null;
     return { lightbox, lightboxImg };
+  };
+
+  // Garante que existem setas de navegação dentro do lightbox (usado para comparações, ex.: regra dos terços).
+  const ensureLbNav = () => {
+    const lb = document.getElementById('lightbox');
+    if(!lb) return;
+    const dialog = lb.querySelector('.lightbox__dialog');
+    if(!dialog) return;
+    if(dialog.querySelector('.lightbox__nav')) return;
+
+    const mk = (cls, label, txt) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'lightbox__nav ' + cls;
+      b.setAttribute('aria-label', label);
+      b.textContent = txt;
+      b.hidden = true;
+      return b;
+    };
+
+    dialog.appendChild(mk('lightbox__nav--prev', 'Voltar à imagem sem grelha', '<'));
+    dialog.appendChild(mk('lightbox__nav--next', 'Ver imagem com grelha', '>'));
   };
 
   const resetZoom = () => {
@@ -421,29 +447,101 @@
   };
 
 
-  const openLb = async (src, alt) => {
+  const openLb = async (src, alt, shouldWatermark, compareSrc, compareStart, galleryCtx) => {
     const lb = getLb();
     if(!lb) return;
 
     const wm = lb.lightbox.querySelector('.lightbox__wm');
+    const navPrev = lb.lightbox.querySelector('.lightbox__nav--prev');
+    const navNext = lb.lightbox.querySelector('.lightbox__nav--next');
 
-    // Por defeito, usar uma versÃÂ£o com marca de ÃÂ¡gua (dataURL) na popup.
-    // Assim, mesmo que o utilizador abra a imagem da popup numa nova janela,
-    // a imagem visÃÂ­vel continua a ter a marca de ÃÂ¡gua.
+
+    // Contexto de galeria (navegação anterior/seguinte)
+    const setGalleryState = (ctx) => {
+      if(!ctx || !Array.isArray(ctx.items) || ctx.items.length < 2){
+        lb.lightbox.removeAttribute('data-gallery');
+        lb.lightbox.removeAttribute('data-gallery-index');
+        lb.lightbox.removeAttribute('data-gallery-count');
+        if(navPrev) navPrev.hidden = true;
+        if(navNext) navNext.hidden = true;
+        if(navPrev) navPrev.setAttribute('aria-label','');
+        if(navNext) navNext.setAttribute('aria-label','');
+        return;
+      }
+      lb.lightbox.setAttribute('data-gallery','1');
+      lb.lightbox.setAttribute('data-gallery-count', String(ctx.items.length));
+      lb.lightbox.setAttribute('data-gallery-index', String(ctx.index || 0));
+      // Mostrar botões e rótulos (usa os símbolos < > já existentes)
+      if(navPrev){
+        navPrev.hidden = false;
+        navPrev.setAttribute('aria-label','Foto anterior');
+      }
+      if(navNext){
+        navNext.hidden = false;
+        navNext.setAttribute('aria-label','Foto seguinte');
+      }
+    };
+    // Normalizar comparação:
+    // - "a" deve ser SEM grelha
+    // - "b" deve ser COM grelha
+    // Independentemente de qual foi a imagem clicada para abrir o popup.
+    const normA = (compareSrc && compareStart === 'b') ? compareSrc : src;
+    const normB = (compareSrc && compareStart === 'b') ? src : compareSrc;
+
+    const setCompareState = (state) => {
+      if(!compareSrc){
+        lb.lightbox.removeAttribute('data-compare-a');
+        lb.lightbox.removeAttribute('data-compare-b');
+        lb.lightbox.dataset.compareState = '';
+        // não esconder aqui: pode estar em modo galeria
+        return;
+      }
+      lb.lightbox.setAttribute('data-compare-a', normA);
+      lb.lightbox.setAttribute('data-compare-b', normB);
+      lb.lightbox.dataset.compareState = state;
+      const isA = state === 'a';
+      if(navPrev) navPrev.hidden = isA;
+      if(navNext) navNext.hidden = !isA;
+    };
+
+    // Marca de Ã¡gua: APENAS para as fotos da Galeria e para a foto do Index.
+    // Nas restantes imagens do site, abrir a imagem original (sem marca).
     lb.lightboxImg.alt = alt || 'Imagem';
     lb.lightboxImg.src = '';
-    try{
-      const watermarked = await buildWatermarkedDataURL(src);
-      lb.lightboxImg.src = watermarked;
-      // Evita dupla marca de ÃÂ¡gua (overlay + marca aplicada no prÃÂ³prio ficheiro)
-      if(wm) wm.style.display = 'none';
-    }catch(e){
+    if(shouldWatermark){
+      try{
+        // Preferência: aplicar marca de água “no ficheiro” (dataURL)
+        // para manter o comportamento de abrir/nova janela com marca.
+        const watermarked = await buildWatermarkedDataURL(src);
+        lb.lightboxImg.src = watermarked;
+        // Evita dupla marca de água (overlay + marca aplicada)
+        if(wm) wm.style.display = 'none';
+      }catch(e){
+        // Se o canvas falhar (ex.: CORS/ficheiro local), manter a imagem original
+        // e mostrar a marca de água por overlay para não desaparecer.
+        lb.lightboxImg.src = src;
+        if(wm) wm.style.display = '';
+      }
+    }else{
       lb.lightboxImg.src = src;
-      if(wm) wm.style.display = '';
+      if(wm) wm.style.display = 'none';
     }
+
+    // Galeria: permitir navegação anterior/seguinte no popup
+    setGalleryState(galleryCtx);
+
+    // Comparação (ex.: regra dos terços) - setas apenas no popup
+    setCompareState((compareStart === 'b') ? 'b' : 'a');
+    // Se está em modo comparação, reaproveitar os botões para alternar imagens (esconde um deles)
+    if(compareSrc){
+      if(navPrev) navPrev.setAttribute('aria-label','Voltar à imagem sem grelha');
+      if(navNext) navNext.setAttribute('aria-label','Ver imagem com grelha');
+    }
+
     lb.lightbox.classList.add('is-open');
     lb.lightbox.setAttribute('aria-hidden','false');
-    document.body.classList.add('modal-open');
+    document.documentElement.classList.add('modal-open');
+  document.body.classList.add('modal-open');
     resetZoom();
     const btn = lb.lightbox.querySelector('.lightbox__close');
     if(btn) btn.focus();
@@ -454,8 +552,20 @@
     if(!lb) return;
     lb.lightbox.classList.remove('is-open');
     lb.lightbox.setAttribute('aria-hidden','true');
-    document.body.classList.remove('modal-open');
+    document.documentElement.classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
     lb.lightboxImg.src = '';
+    // esconder setas / limpar estados
+    const navPrev = lb.lightbox.querySelector('.lightbox__nav--prev');
+    const navNext = lb.lightbox.querySelector('.lightbox__nav--next');
+    if(navPrev) navPrev.hidden = true;
+    if(navNext) navNext.hidden = true;
+    lb.lightbox.removeAttribute('data-compare-a');
+    lb.lightbox.removeAttribute('data-compare-b');
+    lb.lightbox.removeAttribute('data-gallery');
+    lb.lightbox.removeAttribute('data-gallery-index');
+    lb.lightbox.removeAttribute('data-gallery-count');
+    if(lb.lightbox.dataset) lb.lightbox.dataset.compareState = '';
     const wm = lb.lightbox.querySelector('.lightbox__wm');
     if(wm) wm.style.display = '';
     resetZoom();
@@ -466,6 +576,77 @@
     if(!lb) return;
     lb.classList.toggle('is-zoomed');
   };
+
+  // Em mobile, ao tentar fazer scroll sobre uma imagem, pode disparar um "tap".
+  // Este bloco evita abrir a popup quando o gesto foi claramente um scroll.
+  (function preventTapOnScroll(){
+    let sx = 0, sy = 0;
+    let moved = false;
+    const TH = 18; // px (mais tolerante para facilitar o scroll na galeria)
+
+    // Flag robusta: se houver scroll (window) nos últimos ms, não abrir popups.
+    let scrolling = false;
+    const markScroll = () => {
+      scrolling = true;
+      window.__lbBlockClickOnce = true;
+      clearTimeout(window.__lbScrollTimer);
+      window.__lbScrollTimer = setTimeout(() => {
+        scrolling = false;
+        window.__lbBlockClickOnce = false;
+      }, 350);
+    };
+
+    window.addEventListener('scroll', markScroll, { passive: true, capture: true });
+
+    document.addEventListener('touchstart', (e) => {
+      moved = false;
+      const t = e.touches && e.touches[0];
+      if(!t) return;
+      sx = t.clientX;
+      sy = t.clientY;
+    }, { passive: true, capture: true });
+
+    document.addEventListener('touchmove', (e) => {
+      const t = e.touches && e.touches[0];
+      if(!t) return;
+      const dx = Math.abs(t.clientX - sx);
+      const dy = Math.abs(t.clientY - sy);
+      if(dx > TH || dy > TH){
+        moved = true;
+        markScroll();
+      }
+    }, { passive: true, capture: true });
+
+    document.addEventListener('touchend', () => {
+      if(moved){
+        markScroll();
+      }
+    }, { passive: true, capture: true });
+  })();
+
+  // Galeria: usar miniaturas (assets/galeria/thumbs/) quando existirem,
+  // mantendo a imagem completa no data-full para a popup.
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a.galleryItem[data-full] img').forEach((img) => {
+      const a = img.closest('a.galleryItem[data-full]');
+      if(!a) return;
+      const full = a.getAttribute('data-full') || '';
+      if(!full.includes('assets/galeria/')) return;
+      // Já é thumbnail
+      if((img.getAttribute('src') || '').includes('/thumbs/')) return;
+
+      const thumb = full.replace('assets/galeria/', 'assets/galeria/thumbs/');
+      // Tenta thumbnail; se falhar, volta ao full (sem quebrar)
+      img.dataset.thumbTried = '1';
+      img.addEventListener('error', function onErr(){
+        if(img.dataset.thumbTried === '1' && (img.getAttribute('src') || '') === thumb){
+          img.dataset.thumbTried = '2';
+          img.src = full;
+        }
+      }, { once: true });
+      img.src = thumb;
+    });
+  });
 
 
   // Fallback para ficheiros em servidores case-sensitive (GitHub Pages):
@@ -488,6 +669,38 @@
     document.querySelectorAll('img[src*="assets/galeria/"]').forEach(attachImgFallback);
   });
 
+  // Tornar todas as imagens/fotos do site clicáveis para abrir em popup (lightbox)
+  // com o mesmo comportamento da imagem do index.
+  // Aplica-se apenas a imagens de conteúdo (dentro de <main id="conteudo">).
+  document.addEventListener('DOMContentLoaded', () => {
+    const main = document.getElementById('conteudo') || document.querySelector('main');
+    if(!main) return;
+
+    main.querySelectorAll('img').forEach((img) => {
+      if(!img) return;
+      // Ignorar imagens internas do próprio lightbox/QR
+      if(img.closest('#lightbox') || img.closest('#qrbox')) return;
+      // Já tem ligação para lightbox
+      if(img.closest('a.galleryItem[data-full], a.indexPhotoLink[data-full], a.lightboxLink[data-full]')) return;
+      // Ignorar imagens geradas (dataURL) ou sem src
+      const src = img.getAttribute('src') || '';
+      if(!src || src.startsWith('data:')) return;
+      // Permitir excluir imagens específicas se necessário
+      if(img.dataset && img.dataset.noLightbox === '1') return;
+
+      const a = document.createElement('a');
+      a.href = 'javascript:void(0)';
+      a.className = 'lightboxLink';
+      a.setAttribute('data-full', src);
+      a.setAttribute('aria-label', 'Abrir imagem em popup');
+
+      const parent = img.parentNode;
+      if(!parent) return;
+      parent.insertBefore(a, img);
+      a.appendChild(img);
+    });
+  });
+
   document.addEventListener('click', (e) => {
     // 1) abrir lightbox a partir de links com data-full
     // Links que abrem o lightbox:
@@ -495,12 +708,68 @@
     // - .indexPhotoLink (foto do index)
     // - .lightboxLink (outros casos, sem herdar estilos de miniaturas)
     const a = e.target && e.target.closest ? e.target.closest('a.galleryItem[data-full], a.indexPhotoLink[data-full], a.lightboxLink[data-full]') : null;
+    // Se houve gesto de scroll (mobile/trackpad), não abrir popup.
+    if(a && window.__lbBlockClickOnce){
+      e.preventDefault();
+      return;
+    }
+
     if(a){
       e.preventDefault();
       const src = a.getAttribute('data-full');
+      const compareSrc = a.getAttribute('data-compare') || '';
+      const compareStart = a.getAttribute('data-compare-start') || 'a';
       const img = a.querySelector('img');
-      openLb(src, img ? img.alt : '');
+      const shouldWatermark = a.classList.contains('galleryItem') || a.classList.contains('indexPhotoLink');
+      openLb(src, img ? img.alt : '', shouldWatermark, compareSrc, compareStart, (a.classList.contains('galleryItem') ? (function(){ const items = Array.from(document.querySelectorAll('a.galleryItem[data-full]')); return { items, index: Math.max(0, items.indexOf(a)) }; })() : null));
       return;
+    }
+
+    // controlos < > dentro do lightbox (comparação OU navegação da galeria)
+    const navBtn = e.target && e.target.closest ? e.target.closest('.lightbox__nav') : null;
+    if(navBtn){
+      const box = document.getElementById('lightbox');
+      if(!box || !box.classList.contains('is-open')) return;
+
+      const imgEl = document.getElementById('lightboxImg');
+
+      // 1) Modo comparação (Regra dos Terços)
+      const aSrc = box.getAttribute('data-compare-a') || '';
+      const bSrc = box.getAttribute('data-compare-b') || '';
+      if(aSrc && bSrc){
+        const nextState = navBtn.classList.contains('lightbox__nav--prev') ? 'a' : 'b';
+        const targetSrc = nextState === 'a' ? aSrc : bSrc;
+        if(imgEl) imgEl.src = targetSrc;
+        if(box.dataset) box.dataset.compareState = nextState;
+        const prev = box.querySelector('.lightbox__nav--prev');
+        const next = box.querySelector('.lightbox__nav--next');
+        if(prev) prev.hidden = (nextState === 'a');
+        if(next) next.hidden = (nextState === 'b');
+        e.preventDefault();
+        return;
+      }
+
+      // 2) Modo galeria (foto anterior/seguinte)
+      if(box.getAttribute('data-gallery') === '1'){
+        const items = Array.from(document.querySelectorAll('a.galleryItem[data-full]'));
+        const count = items.length;
+        if(count < 2) return;
+        let idx = parseInt(box.getAttribute('data-gallery-index') || '0', 10);
+        if(Number.isNaN(idx)) idx = 0;
+
+        idx = navBtn.classList.contains('lightbox__nav--prev') ? (idx - 1 + count) % count : (idx + 1) % count;
+        box.setAttribute('data-gallery-index', String(idx));
+
+        const a = items[idx];
+        const src = a ? (a.getAttribute('data-full') || '') : '';
+        const alt = (a && a.querySelector('img')) ? a.querySelector('img').alt : '';
+        if(src && imgEl){
+          // na galeria mantém marca de água (overlay ou baked)
+          openLb(src, alt, true, '', 'a', { items, index: idx });
+        }
+        e.preventDefault();
+        return;
+      }
     }
 
     // 2) alternar zoom/fullscreen ao clicar na imagem
@@ -528,8 +797,51 @@
       e.preventDefault();
       closeLb();
     }
+
+    // Setas do teclado: comparação OU galeria
+    if(e.key === 'ArrowRight' || e.key === 'ArrowLeft'){
+      const imgEl = document.getElementById('lightboxImg');
+
+      // 1) comparação (Regra dos Terços)
+      const aSrc = lb.getAttribute('data-compare-a') || '';
+      const bSrc = lb.getAttribute('data-compare-b') || '';
+      if(aSrc && bSrc){
+        const nextState = (e.key === 'ArrowRight') ? 'b' : 'a';
+        if(imgEl) imgEl.src = (nextState === 'a') ? aSrc : bSrc;
+        if(lb.dataset) lb.dataset.compareState = nextState;
+        const prev = lb.querySelector('.lightbox__nav--prev');
+        const next = lb.querySelector('.lightbox__nav--next');
+        if(prev) prev.hidden = (nextState === 'a');
+        if(next) next.hidden = (nextState === 'b');
+        e.preventDefault();
+        return;
+      }
+
+      // 2) galeria
+      if(lb.getAttribute('data-gallery') === '1'){
+        const items = Array.from(document.querySelectorAll('a.galleryItem[data-full]'));
+        const count = items.length;
+        if(count < 2) return;
+        let idx = parseInt(lb.getAttribute('data-gallery-index') || '0', 10);
+        if(Number.isNaN(idx)) idx = 0;
+        idx = (e.key === 'ArrowLeft') ? (idx - 1 + count) % count : (idx + 1) % count;
+        lb.setAttribute('data-gallery-index', String(idx));
+        const a = items[idx];
+        const src = a ? (a.getAttribute('data-full') || '') : '';
+        const alt = (a && a.querySelector('img')) ? a.querySelector('img').alt : '';
+        if(src){
+          openLb(src, alt, true, '', 'a', { items, index: idx });
+          e.preventDefault();
+        }
+      }
+    }
   });
+
+  document.addEventListener('DOMContentLoaded', ensureLbNav);
 })();
+
+
+;
 
 
 document.addEventListener('DOMContentLoaded', init);
@@ -567,7 +879,6 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
  
 
-
 // QR CODE BUTTON: gerar QR do URL da pagina (sem depender do botao direito)
 (function(){
   const btn = () => document.getElementById('qrBtn');
@@ -581,7 +892,8 @@ document.addEventListener('DOMContentLoaded', () => {
     i.src = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(url);
     b.classList.add('is-open');
     b.setAttribute('aria-hidden','false');
-    document.body.classList.add('modal-open');
+    document.documentElement.classList.add('modal-open');
+  document.body.classList.add('modal-open');
     const closeBtn = b.querySelector('.lightbox__close');
     if(closeBtn) closeBtn.focus();
   };
@@ -591,7 +903,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!b || !i) return;
     b.classList.remove('is-open');
     b.setAttribute('aria-hidden','true');
-    document.body.classList.remove('modal-open');
+    document.documentElement.classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
     i.src = '';
   };
 

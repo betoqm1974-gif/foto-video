@@ -7,12 +7,31 @@
  <link rel="icon" href="favicon.ico" />
  <link rel="manifest" href="manifest.webmanifest" />
  <meta name="theme-color" content="#0b0f17" />
- <link rel="stylesheet" href="css/styles.css" />
+ <link rel="preload" as="image" href="assets/img/bg.jpeg" />
+<script>
+  // __setInitialTheme: aplica classes no <html> antes do CSS carregar (evita "flash" ao navegar)
+  (function(){
+    try{
+      var root = document.documentElement;
+      root.setAttribute("data-preload","1");
+      var saved = localStorage.getItem('theme');
+      var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      var t = saved ? saved : (prefersLight ? 'light' : 'dark');
+      root.classList.remove('theme-light','theme-dark');
+      root.classList.add('theme-' + t);
+      // Ajustar a cor da barra do browser no mobile para evitar "flash" ao navegar
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if(meta) meta.setAttribute('content', t === 'light' ? '#f2f2f2' : '#0b0f17');
+      var hc = localStorage.getItem('highContrast');
+      if(hc === '1') root.classList.add("hc");
+    }catch(e){}
+  })();
+ </script>
+ <script>window.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.documentElement.removeAttribute("data-preload");});});</script>
+ <style>html{background:#0f0f10;}html.theme-light{background:#f2f2f2;}body{background:transparent;}</style>
+<link rel="stylesheet" href="css/styles.css" />
 </head>
-<body class="theme-dark">
-
-
-<a class="skip-link" href="#conteudo">Saltar para o conteúdo principal</a>
+<body class=""><a class="skip-link" href="#conteudo">Saltar para o conteúdo principal</a>
 <header>
  <div class="navwrap">
  <div class="topbar">
@@ -50,7 +69,25 @@
 
  <nav id="navPanel" aria-label="Menu principal">
  <ul class="navlist" id="menuPrincipal">
- <li><a class="homeLink" href="index.html">Início</a></li><li><a href="planos.html">Planos</a></li><li><a href="angulos.html">Ângulos</a></li><li><a href="tercos.html">Regra dos Terços</a></li>
+ <li><a class="homeLink" href="index.html" aria-label="Início">
+   <span class="homeIcon" aria-hidden="true">
+     <svg class="homeSvg" viewBox="0 0 64 64" focusable="false" aria-hidden="true">
+       <!-- Casa -->
+       <g class="homeHouse">
+         <path class="homeHouseFill" d="M10 30 L32 13 L54 30 V54 H10 Z"/>
+         <path class="homeHouseFill" d="M44 16 H52 V30 H44 Z"/>
+         <path class="homeHouseFill" d="M8 30 L32 10 L56 30 L53 34 L32 18 L11 34 Z"/>
+       </g>
+
+       <!-- Círculo + Play (vídeo) -->
+       <g class="homeInner">
+         <circle class="homeInnerStroke" cx="32" cy="39" r="13"/>
+         <polygon class="homeAccentFill" points="28,33 28,45 40,39"/>
+       </g>
+     </svg>
+   </span>
+   <span class="homeLabel">Início</span>
+ </a></li><li><a href="planos.html">Planos</a></li><li><a href="angulos.html">Ângulos</a></li><li><a href="tercos.html">Regra dos Terços</a></li>
           <li><a href="movimentos.html">Movimentos</a></li>
 
   <li><a href="galeria.html">Galeria</a></li>
