@@ -1,15 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-PT">
 <head>
- <meta charset="utf-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1" />
- <title>Técnicas de Fotografia & Vídeo</title>
- <link rel="icon" href="favicon.ico" />
- <link rel="manifest" href="manifest.webmanifest" />
- <meta name="color-scheme" content="dark light" />
- <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f2f2" />
- <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f17" />
-<link rel="preload" as="image" href="assets/img/bg.jpeg" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Técnicas de Fotografia &amp; Vídeo</title>
+<link href="favicon.ico" rel="icon"/>
+<link href="manifest.webmanifest" rel="manifest"/>
+<meta content="dark light" name="color-scheme"/>
+<meta content="#f2f2f2" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#0b0f17" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<link as="image" href="assets/img/bg.jpeg" rel="preload"/>
 <script>
   // __setInitialTheme: aplica classes no <html> antes do CSS carregar (evita "flash" ao navegar)
   (function(){
@@ -29,188 +30,167 @@
     }catch(e){}
   })();
  </script>
- <script>window.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.documentElement.removeAttribute("data-preload");});});</script>
- <style>html,body{background:#0f0f10;}html.theme-light,html.theme-light body{background:#f2f2f2;}html[data-preload] *,html[data-preload] *::before,html[data-preload] *::after{transition:none!important;animation:none!important;}</style>
-<link rel="stylesheet" href="css/styles.css" />
+<script>window.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.documentElement.removeAttribute("data-preload");});});</script>
+<style>html,body{background:#0f0f10;}html.theme-light,html.theme-light body{background:#f2f2f2;}html[data-preload] *,html[data-preload] *::before,html[data-preload] *::after{transition:none!important;animation:none!important;}</style>
+<link href="css/styles.css" rel="stylesheet"/>
 </head>
 <body class=""><a class="skip-link" href="#conteudo">Saltar para o conteúdo principal</a>
 <header>
- <div class="navwrap">
- <div class="topbar">
- <button class="menuBtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="navPanel" aria-label="Abrir menu"><span class="menuLabel" aria-hidden="true">MENU</span><span class="burger" aria-hidden="true"><span></span><span></span><span></span></span></button>
- <a class="brand" href="index.html">
- <img src="assets/img/logo.png" alt="Logótipo do site: fotografia e vídeo" />
- <span class="title">
- <strong>Técnicas de Fotografia & Vídeo</strong>
+<div class="navwrap">
+<div class="topbar"><div aria-label="Opções de acessibilidade" class="tools">
+<button aria-label="Diminuir tamanho do texto" class="toolbtn" id="aMinus" type="button">A-</button>
+<button aria-label="Aumentar tamanho do texto" class="toolbtn" id="aPlus" type="button">A+</button>
+<button aria-label="Ativar alto contraste" aria-pressed="false" class="toolbtn" id="hcBtn" type="button">Contraste</button>
+<button aria-label="Alternar entre tema claro e escuro" aria-pressed="false" class="themeSwitch" id="themeBtn" title="Alternar tema" type="button">
+<span aria-hidden="true" class="themeIcon sun">
+<svg aria-hidden="true" focusable="false" height="16" viewbox="0 0 24 24" width="16">
+<circle cx="12" cy="12" r="4"></circle>
+<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+</svg>
+</span>
+<span aria-hidden="true" class="themeIcon moon">
+<svg aria-hidden="true" focusable="false" height="16" viewbox="0 0 24 24" width="16">
+<path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a6.5 6.5 0 1 0 11.5 11.5z"></path>
+</svg>
+</span>
+<span aria-hidden="true" class="themeKnob"></span>
+</button>
+<button aria-label="Gerar QR Code desta página" class="toolbtn" id="qrBtn" type="button">QR</button>
+</div><a class="brand" href="index.html">
+<img alt="Logótipo do site: fotografia e vídeo" src="assets/img/logo.png"/>
+<span class="title">
+<strong>Técnicas de Fotografia &amp; Vídeo</strong>
 <span class="subtitle">Introdução à Multimédia</span>
 <span class="classTag">12º Ano | AI-B</span>
- </span>
- </a>
-
- <div class="tools" aria-label="Opções de acessibilidade">
- <button class="toolbtn" id="aMinus" type="button" aria-label="Diminuir tamanho do texto">A-</button>
- <button class="toolbtn" id="aPlus" type="button" aria-label="Aumentar tamanho do texto">A+</button>
- <button class="toolbtn" id="hcBtn" type="button" aria-label="Ativar alto contraste" aria-pressed="false">Contraste</button>
-   <button class="themeSwitch" id="themeBtn" type="button" aria-pressed="false" title="Alternar tema" aria-label="Alternar entre tema claro e escuro">
-  <span class="themeIcon sun" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
-      <circle cx="12" cy="12" r="4"></circle>
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-    </svg>
-  </span>
-  <span class="themeIcon moon" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
-      <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a6.5 6.5 0 1 0 11.5 11.5z"></path>
-    </svg>
-  </span>
-  <span class="themeKnob" aria-hidden="true"></span>
-</button>
- <button class="toolbtn" id="qrBtn" type="button" aria-label="Gerar QR Code desta página">QR</button>
-</div>
-</div>
-
- <nav id="navPanel" aria-label="Menu principal">
- <ul class="navlist" id="menuPrincipal">
- <li><a class="homeLink" href="index.html" aria-label="Início">
-   <span class="homeIcon" aria-hidden="true">
-     <svg class="homeSvg" viewBox="0 0 64 64" focusable="false" aria-hidden="true">
-       <!-- Casa -->
-       <g class="homeHouse">
-         <path class="homeHouseFill" d="M10 30 L32 13 L54 30 V54 H10 Z"/>
-         <path class="homeHouseFill" d="M44 16 H52 V30 H44 Z"/>
-         <path class="homeHouseFill" d="M8 30 L32 10 L56 30 L53 34 L32 18 L11 34 Z"/>
-       </g>
-
-       <!-- Círculo + Play (vídeo) -->
-       <g class="homeInner">
-         <circle class="homeInnerStroke" cx="32" cy="39" r="13"/>
-         <polygon class="homeAccentFill" points="28,33 28,45 40,39"/>
-       </g>
-     </svg>
-   </span>
-   <span class="homeLabel">Início</span>
- </a></li><li><a href="planos.html">Planos</a></li><li><a href="angulos.html">Ângulos</a></li><li><a href="tercos.html">Regra dos Terços</a></li>
-          <li><a href="movimentos.html">Movimentos</a></li>
-
-  <li><a href="galeria.html">Galeria</a></li>
+</span>
+</a><div class="mobileRow"><button aria-controls="navPanel" aria-expanded="false" aria-label="Abrir menu" class="menuBtn" id="menuBtn" type="button"><span aria-hidden="true" class="menuLabel">MENU</span><span aria-hidden="true" class="burger"><span></span><span></span><span></span></span></button><div aria-hidden="true" class="mobileQuote">
+<span>“A fotografia é um poema ao olhar,</span>
+<span>é o eternizar de um momento,</span>
+<span>esculpido com raios de luz.”</span>
+</div></div></div>
+<nav aria-label="Menu principal" id="navPanel">
+<ul class="navlist" id="menuPrincipal">
+<li><a aria-label="Início" class="homeLink" href="index.html">
+<span aria-hidden="true" class="homeIcon">
+<svg aria-hidden="true" class="homeSvg" focusable="false" viewbox="0 0 64 64">
+<!-- Casa -->
+<g class="homeHouse">
+<path class="homeHouseFill" d="M10 30 L32 13 L54 30 V54 H10 Z"></path>
+<path class="homeHouseFill" d="M44 16 H52 V30 H44 Z"></path>
+<path class="homeHouseFill" d="M8 30 L32 10 L56 30 L53 34 L32 18 L11 34 Z"></path>
+</g>
+<!-- Círculo + Play (vídeo) -->
+<g class="homeInner">
+<circle class="homeInnerStroke" cx="32" cy="39" r="13"></circle>
+<polygon class="homeAccentFill" points="28,33 28,45 40,39"></polygon>
+</g>
+</svg>
+</span>
+<span class="homeLabel">Início</span>
+</a></li><li><a href="planos.html">Planos</a></li><li><a href="angulos.html">Ângulos</a></li><li><a href="tercos.html">Regra dos Terços</a></li>
+<li><a href="movimentos.html">Movimentos</a></li>
+<li><a href="galeria.html">Galeria</a></li>
 </ul>
-  <div class="menuQuote" aria-label="Citação">
-  <span>&quot;A fotografia é um poema ao olhar,</span><br>
-  <span>é o eternizar de um momento, esculpido com raios de luz.&quot;</span>
+<div aria-label="Citação" class="menuQuote">
+<span>"A fotografia é um poema ao olhar,</span><br/>
+<span>é o eternizar de um momento, esculpido com raios de luz."</span>
 </div>
- </nav>
- </div>
+</nav>
+</div>
 </header>
-
 <main id="conteudo" tabindex="-1">
-
-
 <section class="hero">
- <h1>Ângulos (ponto de vista)</h1>
- <p>O ângulo define <strong>de onde</strong> olhamos para o sujeito. Aqui vais usar 3 ângulos base: <strong>Picado</strong>, <strong>Normal</strong> e <strong>Contra‑picado</strong>.</p>
+<h1>Ângulos<br/><span class="pageSub">Ponto de Vista</span></h1>
+<p>O ângulo define <strong>de onde</strong> olhamos para o sujeito. Aqui vais usar 3 ângulos base: <strong>Picado</strong>, <strong>Normal</strong> e <strong>Contra‑picado</strong>.</p>
 </section>
-
 <section class="section">
- <h2>Esquema</h2>
- <p>Consulta o esquema para perceber a posição relativa da câmara.</p>
- <figure class="figure">
- <img src="assets/img/angulos_esquema.png" alt="Esquema dos ângulos da câmara: picado, normal e contra-picado." loading="lazy" class="mediaRound" />
- <figcaption>Esquema - Ângulos da câmara</figcaption>
- </figure>
+<h2>Esquema</h2>
+<p>Consulta o esquema para perceber a posição relativa da câmara.</p>
+<figure class="figure">
+<img alt="Esquema dos ângulos da câmara: picado, normal e contra-picado." class="mediaRound" loading="lazy" src="assets/img/angulos_esquema.png"/>
+<figcaption>Esquema - Ângulos da câmara</figcaption>
+</figure>
 </section>
-
 <section class="section" id="exemplos-angulos">
-  <h2>Exemplos - Ângulos</h2>
-  <p class="muted">Vê a diferença entre os ângulos e compara fotografia e vídeo.</p>
-
-  <div class="examples-grid">
-    <article class="example-card">
-      <h3>Ângulo Picado</h3>
-      <div class="stack">
-        <figure class="figure">
-          <img src="assets/exemplos/angulos/angulo_picado_foto.png" alt="Fotografia - exemplo de ângulo picado">
-          <figcaption>Fotografia - exemplo de Ângulo Picado</figcaption>
-        </figure>
-        <figure class="figure">
-          <video controls preload="metadata">
-            <source src="assets/exemplos/angulos/angulo_picado_video.mp4" type="video/mp4">
+<h2>Exemplos</h2>
+<p class="muted">Vê a diferença entre os ângulos e compara fotografia e vídeo.</p>
+<div class="examples-grid">
+<article class="example-card">
+<h3>Ângulo Picado</h3>
+<div class="stack">
+<figure class="figure">
+<img alt="Fotografia - exemplo de ângulo picado" src="assets/exemplos/angulos/angulo_picado_foto.png"/>
+<figcaption>Fotografia - exemplo de Ângulo Picado</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata">
+<source src="assets/exemplos/angulos/angulo_picado_video.mp4" type="video/mp4"/>
             O teu navegador não suporta vídeo HTML5.
           </video>
-          <figcaption>Vídeo - exemplo de Ângulo Picado</figcaption>
-        </figure>
-      </div>
-    </article>
-
-    <article class="example-card">
-      <h3>Ângulo Normal</h3>
-      <div class="stack">
-        <figure class="figure">
-          <img src="assets/exemplos/angulos/angulo_normal_foto.png" alt="Fotografia - exemplo de ângulo normal">
-          <figcaption>Fotografia - exemplo de Ângulo Normal</figcaption>
-        </figure>
-        <figure class="figure">
-          <video controls preload="metadata">
-            <source src="assets/exemplos/angulos/angulo_normal_video.mp4" type="video/mp4">
+<figcaption>Vídeo - exemplo de Ângulo Picado</figcaption>
+</figure>
+</div>
+</article>
+<article class="example-card">
+<h3>Ângulo Normal</h3>
+<div class="stack">
+<figure class="figure">
+<img alt="Fotografia - exemplo de ângulo normal" src="assets/exemplos/angulos/angulo_normal_foto.png"/>
+<figcaption>Fotografia - exemplo de Ângulo Normal</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata">
+<source src="assets/exemplos/angulos/angulo_normal_video.mp4" type="video/mp4"/>
             O teu navegador não suporta vídeo HTML5.
           </video>
-          <figcaption>Vídeo - exemplo de Ângulo Normal</figcaption>
-        </figure>
-      </div>
-    </article>
-
-    <article class="example-card">
-      <h3>Ângulo Contra-picado</h3>
-      <div class="stack">
-        <figure class="figure">
-          <img src="assets/exemplos/angulos/angulo_contrapicado_foto.png" alt="Fotografia - exemplo de ângulo contra-picado">
-          <figcaption>Fotografia - exemplo de Ângulo Contra-picado</figcaption>
-        </figure>
-        <figure class="figure">
-          <video controls preload="metadata">
-            <source src="assets/exemplos/angulos/angulo_contrapicado_video.mp4" type="video/mp4">
+<figcaption>Vídeo - exemplo de Ângulo Normal</figcaption>
+</figure>
+</div>
+</article>
+<article class="example-card">
+<h3>Ângulo Contra-picado</h3>
+<div class="stack">
+<figure class="figure">
+<img alt="Fotografia - exemplo de ângulo contra-picado" src="assets/exemplos/angulos/angulo_contrapicado_foto.png"/>
+<figcaption>Fotografia - exemplo de Ângulo Contra-picado</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata">
+<source src="assets/exemplos/angulos/angulo_contrapicado_video.mp4" type="video/mp4"/>
             O teu navegador não suporta vídeo HTML5.
           </video>
-          <figcaption>Vídeo - exemplo de Ângulo Contra-picado</figcaption>
-        </figure>
-      </div>
-    </article>
-  </div>
+<figcaption>Vídeo - exemplo de Ângulo Contra-picado</figcaption>
+</figure>
+</div>
+</article>
+</div>
 </section>
-
-
 <section class="section">
-  <h2>Mini‑tarefa (Ângulos)</h2>
-  <p class="note">Tira fotografias ou grava vídeos aplicando, em cada captação, um dos ângulos apresentados. Procura variar os enquadramentos e garantir que cada ângulo fica claramente identificado no resultado final.</p>
+<h2>Mini‑tarefa</h2>
+<p class="note">Tira fotografias ou grava vídeos aplicando, em cada captação, um dos ângulos apresentados. Procura variar os enquadramentos e garantir que cada ângulo fica claramente identificado no resultado final.</p>
 </section>
-
 </main>
-
 <footer>
- <div class="footerwrap">
-  <div>Manuel Morais ©2026</div>
-  <div><a href="glossario.html">Glossário</a></div>
- </div>
+<div class="footerwrap">
+<div>Manuel Morais ©2026</div>
+<div><a href="glossario.html">Glossário</a></div>
+</div>
 </footer>
 <script src="js/ui.js"></script>
-
-
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <div class="lightbox__backdrop" data-close="1"></div>
-  <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-label="Visualização de imagem">
-    <button class="lightbox__close" type="button" aria-label="Fechar" data-close="1">×</button>
-    <img class="lightbox__img" id="lightboxImg" alt="">
-    <img class="lightbox__wm" src="assets/logo_betoqm_prata.png" alt="" aria-hidden="true">
-  </div>
+<div aria-hidden="true" class="lightbox" id="lightbox">
+<div class="lightbox__backdrop" data-close="1"></div>
+<div aria-label="Visualização de imagem" aria-modal="true" class="lightbox__dialog" role="dialog">
+<button aria-label="Fechar" class="lightbox__close" data-close="1" type="button">×</button>
+<img alt="" class="lightbox__img" id="lightboxImg"/>
+<img alt="" aria-hidden="true" class="lightbox__wm" src="assets/logo_betoqm_prata.png"/>
 </div>
-
-
-<div class="lightbox" id="qrbox" aria-hidden="true">
-  <div class="lightbox__backdrop" data-qr-close="1"></div>
-  <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-label="QR Code">
-    <button class="lightbox__close" type="button" aria-label="Fechar" data-qr-close="1">×</button>
-    <img class="lightbox__img" id="qrImg" alt="QR Code desta página">
-  </div>
 </div>
-
+<div aria-hidden="true" class="lightbox" id="qrbox">
+<div class="lightbox__backdrop" data-qr-close="1"></div>
+<div aria-label="QR Code" aria-modal="true" class="lightbox__dialog" role="dialog">
+<button aria-label="Fechar" class="lightbox__close" data-qr-close="1" type="button">×</button>
+<img alt="QR Code desta página" class="lightbox__img" id="qrImg"/>
+</div>
+</div>
 </body>
 </html>

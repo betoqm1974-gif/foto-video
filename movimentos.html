@@ -37,17 +37,7 @@
 <body class=""><a class="skip-link" href="#conteudo">Saltar para o conteúdo principal</a>
 <header>
 <div class="navwrap">
-<div class="topbar">
-<button aria-controls="navPanel" aria-expanded="false" aria-label="Abrir menu" class="menuBtn" id="menuBtn" type="button"><span aria-hidden="true" class="menuLabel">MENU</span><span aria-hidden="true" class="burger"><span></span><span></span><span></span></span></button>
-<a class="brand" href="index.html">
-<img alt="Logótipo do site: fotografia e vídeo" src="assets/img/logo.png"/>
-<span class="title">
-<strong>Técnicas de Fotografia &amp; Vídeo</strong>
-<span class="subtitle">Introdução à Multimédia</span>
-<span class="classTag">12º Ano | AI-B</span>
-</span>
-</a>
-<div aria-label="Opções de acessibilidade" class="tools">
+<div class="topbar"><div aria-label="Opções de acessibilidade" class="tools">
 <button aria-label="Diminuir tamanho do texto" class="toolbtn" id="aMinus" type="button">A-</button>
 <button aria-label="Aumentar tamanho do texto" class="toolbtn" id="aPlus" type="button">A+</button>
 <button aria-label="Ativar alto contraste" aria-pressed="false" class="toolbtn" id="hcBtn" type="button">Contraste</button>
@@ -66,8 +56,18 @@
 <span aria-hidden="true" class="themeKnob"></span>
 </button>
 <button aria-label="Gerar QR Code desta página" class="toolbtn" id="qrBtn" type="button">QR</button>
-</div>
-</div>
+</div><a class="brand" href="index.html">
+<img alt="Logótipo do site: fotografia e vídeo" src="assets/img/logo.png"/>
+<span class="title">
+<strong>Técnicas de Fotografia &amp; Vídeo</strong>
+<span class="subtitle">Introdução à Multimédia</span>
+<span class="classTag">12º Ano | AI-B</span>
+</span>
+</a><div class="mobileRow"><button aria-controls="navPanel" aria-expanded="false" aria-label="Abrir menu" class="menuBtn" id="menuBtn" type="button"><span aria-hidden="true" class="menuLabel">MENU</span><span aria-hidden="true" class="burger"><span></span><span></span><span></span></span></button><div aria-hidden="true" class="mobileQuote">
+<span>“A fotografia é um poema ao olhar,</span>
+<span>é o eternizar de um momento,</span>
+<span>esculpido com raios de luz.”</span>
+</div></div></div>
 <nav aria-label="Menu principal" id="navPanel">
 <ul class="navlist" id="menuPrincipal">
 <li><a aria-label="Início" class="homeLink" href="index.html">
@@ -103,7 +103,7 @@
 <h1>Movimentos de câmara</h1>
 <p>Os movimentos ajudam a guiar o olhar, revelar informação e dar ritmo. A regra é simples: <strong>move com intenção</strong> - se não acrescenta significado, é melhor ficar estático.</p>
 </section>
-<section class="section">
+<section class="section" id="panoramica">
 <h2>Panorâmica (Pan)</h2>
 <p>Rotação da câmara sobre o próprio eixo, da esquerda para a direita, de cima para baixo (ou vice-versa). Útil para seguir um sujeito ou mostrar um espaço.</p>
 <h3>Quando usar</h3>
@@ -123,38 +123,23 @@
 <figure class="figure exampleFrame">
 <div class="exampleMedia">
 <video controls="" preload="metadata" src="assets/exemplos/movimentos_video/panoramica_horizontal.mp4">
-        Desculpa, o teu navegador não suporta vídeo HTML5.
-      </video>
+          Desculpa, o teu navegador não suporta vídeo HTML5.
+        </video>
 </div>
 <figcaption>Panorâmica Horizontal</figcaption>
 </figure>
 <figure class="figure exampleFrame">
 <div class="exampleMedia">
 <video controls="" preload="metadata" src="assets/exemplos/movimentos_video/panoramica_vertical.mp4">
-        Desculpa, o teu navegador não suporta vídeo HTML5.
-      </video>
+          Desculpa, o teu navegador não suporta vídeo HTML5.
+        </video>
 </div>
 <figcaption>Panorâmica Vertical</figcaption>
 </figure>
 </div>
 </div>
 </section>
-<section class="section">
-<h2>Travelling (Dolly)</h2>
-<p>Movimento da câmara no espaço (aproximar/afastar ou lateral). Pode aumentar <strong>imersão</strong> e alterar a relação entre sujeito e fundo.</p>
-<h3>Quando usar</h3>
-<ul>
-<li>Aproximar para aumentar tensão/emoção.</li>
-<li>Afastar para revelar contexto.</li>
-</ul>
-<h3>Erros comuns</h3>
-<ul>
-<li>Tremor - usa estabilização, tripé com rodas, gimbal ou deslocação suave.</li>
-<li>Mudar de direção a meio sem intenção.</li>
-</ul>
-<div class="note"><strong>Prática:</strong> faz um travelling de aproximação (3-5 metros) em passo lento e constante. Testa com e sem estabilização.</div>
-</section>
-<section class="section">
+<section class="section" id="zoom">
 <h2>Zoom</h2>
 <p>Alteração da distância focal da lente (não é deslocação da câmara). Muda o enquadramento e pode criar sensação de <strong>aproximação</strong> ou <strong>distanciamento</strong>.</p>
 <h3>Quando usar</h3>
@@ -167,9 +152,30 @@
 <li>Zooms constantes e "nervosos" (parece amador).</li>
 <li>Perder foco/exposição durante o zoom.</li>
 </ul>
-<div class="note"><strong>Prática:</strong> grava 2 planos: um com zoom suave e outro com corte (sem zoom). Decide qual fica mais limpo.</div>
+<div class="note practiceNote"><strong>Prática:</strong> grava 2 planos: um com zoom suave e outro com corte (sem zoom). Decide qual fica mais limpo.</div>
+<div class="examplesWrap">
+<div class="examplesHeading">Exemplos</div>
+<div class="grid2">
+<figure class="figure exampleFrame">
+<div class="exampleMedia">
+<video controls="" preload="metadata" src="assets/exemplos/movimentos_video/zoom_in.mp4">
+          Desculpa, o teu navegador não suporta vídeo HTML5.
+        </video>
+</div>
+<figcaption>Zoom IN (Aproximar)</figcaption>
+</figure>
+<figure class="figure exampleFrame">
+<div class="exampleMedia">
+<video controls="" preload="metadata" src="assets/exemplos/movimentos_video/zoom_out.mp4">
+          Desculpa, o teu navegador não suporta vídeo HTML5.
+        </video>
+</div>
+<figcaption>Zoom OUT (Afastar)</figcaption>
+</figure>
+</div>
+</div>
 </section>
-<section class="section">
+<section class="section" id="resumo">
 <h2>Resumo rápido</h2>
 <ul>
 <li>Começa e termina cada movimento com 1-2 segundos estático.</li>

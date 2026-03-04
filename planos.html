@@ -1,15 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="pt-PT">
 <head>
- <meta charset="utf-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1" />
- <title>Técnicas de Fotografia & Vídeo</title>
- <link rel="icon" href="favicon.ico" />
- <link rel="manifest" href="manifest.webmanifest" />
- <meta name="color-scheme" content="dark light" />
- <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f2f2" />
- <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0f17" />
-<link rel="preload" as="image" href="assets/img/bg.jpeg" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Técnicas de Fotografia &amp; Vídeo</title>
+<link href="favicon.ico" rel="icon"/>
+<link href="manifest.webmanifest" rel="manifest"/>
+<meta content="dark light" name="color-scheme"/>
+<meta content="#f2f2f2" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#0b0f17" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<link as="image" href="assets/img/bg.jpeg" rel="preload"/>
 <script>
   // __setInitialTheme: aplica classes no <html> antes do CSS carregar (evita "flash" ao navegar)
   (function(){
@@ -29,305 +30,237 @@
     }catch(e){}
   })();
  </script>
- <script>window.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.documentElement.removeAttribute("data-preload");});});</script>
- <style>html,body{background:#0f0f10;}html.theme-light,html.theme-light body{background:#f2f2f2;}html[data-preload] *,html[data-preload] *::before,html[data-preload] *::after{transition:none!important;animation:none!important;}</style>
-<link rel="stylesheet" href="css/styles.css" />
+<script>window.addEventListener("DOMContentLoaded",function(){requestAnimationFrame(function(){document.documentElement.removeAttribute("data-preload");});});</script>
+<style>html,body{background:#0f0f10;}html.theme-light,html.theme-light body{background:#f2f2f2;}html[data-preload] *,html[data-preload] *::before,html[data-preload] *::after{transition:none!important;animation:none!important;}</style>
+<link href="css/styles.css" rel="stylesheet"/>
 </head>
 <body class=""><a class="skip-link" href="#conteudo">Saltar para o conteúdo principal</a>
 <header>
- <div class="navwrap">
- <div class="topbar">
- <button class="menuBtn" id="menuBtn" type="button" aria-expanded="false" aria-controls="navPanel" aria-label="Abrir menu"><span class="menuLabel" aria-hidden="true">MENU</span><span class="burger" aria-hidden="true"><span></span><span></span><span></span></span></button>
- <a class="brand" href="index.html">
- <img src="assets/img/logo.png" alt="Logótipo do site: fotografia e vídeo" />
- <span class="title">
- <strong>Técnicas de Fotografia & Vídeo</strong>
+<div class="navwrap">
+<div class="topbar"><div aria-label="Opções de acessibilidade" class="tools">
+<button aria-label="Diminuir tamanho do texto" class="toolbtn" id="aMinus" type="button">A-</button>
+<button aria-label="Aumentar tamanho do texto" class="toolbtn" id="aPlus" type="button">A+</button>
+<button aria-label="Ativar alto contraste" aria-pressed="false" class="toolbtn" id="hcBtn" type="button">Contraste</button>
+<button aria-label="Alternar entre tema claro e escuro" aria-pressed="false" class="themeSwitch" id="themeBtn" title="Alternar tema" type="button">
+<span aria-hidden="true" class="themeIcon sun">
+<svg aria-hidden="true" focusable="false" height="16" viewbox="0 0 24 24" width="16">
+<circle cx="12" cy="12" r="4"></circle>
+<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+</svg>
+</span>
+<span aria-hidden="true" class="themeIcon moon">
+<svg aria-hidden="true" focusable="false" height="16" viewbox="0 0 24 24" width="16">
+<path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a6.5 6.5 0 1 0 11.5 11.5z"></path>
+</svg>
+</span>
+<span aria-hidden="true" class="themeKnob"></span>
+</button>
+<button aria-label="Gerar QR Code desta página" class="toolbtn" id="qrBtn" type="button">QR</button>
+</div><a class="brand" href="index.html">
+<img alt="Logótipo do site: fotografia e vídeo" src="assets/img/logo.png"/>
+<span class="title">
+<strong>Técnicas de Fotografia &amp; Vídeo</strong>
 <span class="subtitle">Introdução à Multimédia</span>
 <span class="classTag">12º Ano | AI-B</span>
- </span>
- </a>
-
- <div class="tools" aria-label="Opções de acessibilidade">
- <button class="toolbtn" id="aMinus" type="button" aria-label="Diminuir tamanho do texto">A-</button>
- <button class="toolbtn" id="aPlus" type="button" aria-label="Aumentar tamanho do texto">A+</button>
- <button class="toolbtn" id="hcBtn" type="button" aria-label="Ativar alto contraste" aria-pressed="false">Contraste</button>
-   <button class="themeSwitch" id="themeBtn" type="button" aria-pressed="false" title="Alternar tema" aria-label="Alternar entre tema claro e escuro">
-  <span class="themeIcon sun" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
-      <circle cx="12" cy="12" r="4"></circle>
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-    </svg>
-  </span>
-  <span class="themeIcon moon" aria-hidden="true">
-    <svg viewBox="0 0 24 24" width="16" height="16" focusable="false" aria-hidden="true">
-      <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a6.5 6.5 0 1 0 11.5 11.5z"></path>
-    </svg>
-  </span>
-  <span class="themeKnob" aria-hidden="true"></span>
-</button>
- <button class="toolbtn" id="qrBtn" type="button" aria-label="Gerar QR Code desta página">QR</button>
-</div>
-</div>
-
- <nav id="navPanel" aria-label="Menu principal">
- <ul class="navlist" id="menuPrincipal">
- <li><a class="homeLink" href="index.html" aria-label="Início">
-   <span class="homeIcon" aria-hidden="true">
-     <svg class="homeSvg" viewBox="0 0 64 64" focusable="false" aria-hidden="true">
-       <!-- Casa -->
-       <g class="homeHouse">
-         <path class="homeHouseFill" d="M10 30 L32 13 L54 30 V54 H10 Z"/>
-         <path class="homeHouseFill" d="M44 16 H52 V30 H44 Z"/>
-         <path class="homeHouseFill" d="M8 30 L32 10 L56 30 L53 34 L32 18 L11 34 Z"/>
-       </g>
-
-       <!-- Círculo + Play (vídeo) -->
-       <g class="homeInner">
-         <circle class="homeInnerStroke" cx="32" cy="39" r="13"/>
-         <polygon class="homeAccentFill" points="28,33 28,45 40,39"/>
-       </g>
-     </svg>
-   </span>
-   <span class="homeLabel">Início</span>
- </a></li><li><a href="planos.html">Planos</a></li><li><a href="angulos.html">Ângulos</a></li><li><a href="tercos.html">Regra dos Terços</a></li>
-          <li><a href="movimentos.html">Movimentos</a></li>
-
-  <li><a href="galeria.html">Galeria</a></li>
+</span>
+</a><div class="mobileRow"><button aria-controls="navPanel" aria-expanded="false" aria-label="Abrir menu" class="menuBtn" id="menuBtn" type="button"><span aria-hidden="true" class="menuLabel">MENU</span><span aria-hidden="true" class="burger"><span></span><span></span><span></span></span></button><div aria-hidden="true" class="mobileQuote">
+<span>“A fotografia é um poema ao olhar,</span>
+<span>é o eternizar de um momento,</span>
+<span>esculpido com raios de luz.”</span>
+</div></div></div>
+<nav aria-label="Menu principal" id="navPanel">
+<ul class="navlist" id="menuPrincipal">
+<li><a aria-label="Início" class="homeLink" href="index.html">
+<span aria-hidden="true" class="homeIcon">
+<svg aria-hidden="true" class="homeSvg" focusable="false" viewbox="0 0 64 64">
+<!-- Casa -->
+<g class="homeHouse">
+<path class="homeHouseFill" d="M10 30 L32 13 L54 30 V54 H10 Z"></path>
+<path class="homeHouseFill" d="M44 16 H52 V30 H44 Z"></path>
+<path class="homeHouseFill" d="M8 30 L32 10 L56 30 L53 34 L32 18 L11 34 Z"></path>
+</g>
+<!-- Círculo + Play (vídeo) -->
+<g class="homeInner">
+<circle class="homeInnerStroke" cx="32" cy="39" r="13"></circle>
+<polygon class="homeAccentFill" points="28,33 28,45 40,39"></polygon>
+</g>
+</svg>
+</span>
+<span class="homeLabel">Início</span>
+</a></li><li><a href="planos.html">Planos</a></li><li><a href="angulos.html">Ângulos</a></li><li><a href="tercos.html">Regra dos Terços</a></li>
+<li><a href="movimentos.html">Movimentos</a></li>
+<li><a href="galeria.html">Galeria</a></li>
 </ul>
-  <div class="menuQuote" aria-label="Citação">
-  <span>&quot;A fotografia é um poema ao olhar,</span><br>
-  <span>é o eternizar de um momento, esculpido com raios de luz.&quot;</span>
+<div aria-label="Citação" class="menuQuote">
+<span>"A fotografia é um poema ao olhar,</span><br/>
+<span>é o eternizar de um momento, esculpido com raios de luz."</span>
 </div>
- </nav>
- </div>
+</nav>
+</div>
 </header>
-
 <main id="conteudo" tabindex="-1">
-
-
-
 <section class="hero">
- <h1>Planos (enquadramentos)</h1>
- <p>Os planos são a escolha da quantidade de cena que aparece na imagem - do plano geral, que mostra o contexto, ao plano próximo, que destaca detalhes e emoção.</p>
+<h1>Planos<br/><span class="pageSub">Enquadramentos</span></h1>
+<p>Os planos são a escolha da quantidade de cena que aparece na imagem - do plano geral, que mostra o contexto, ao plano próximo, que destaca detalhes e emoção.</p>
 </section>
-
 <section class="section">
-  <h2>Ideia-chave</h2>
-  <p>Um plano ajuda-te a <strong>dosar a informação</strong> numa imagem: quanto mais afastada está a câmara, mais descreves o espaço; quanto mais te aproximas, mais destacas emoções e detalhes.</p>
-  <ul>
-    <li><strong>Planos gerais</strong> - são mais descritivos: situam o lugar e criam uma leitura mais "respirada".</li>
-    <li><strong>Planos médios</strong> - têm valor narrativo: mostram ação e relação entre personagens, sem perder o contexto.</li>
-    <li><strong>Planos próximos</strong> - são expressivos: aproximam-nos do rosto ou do detalhe e tornam a imagem mais íntima.</li>
-  </ul>
-  <p class="note"><strong>Regra prática:</strong>  quanto mais pormenor, mais tempo o espectador precisa para "ler" a imagem; quanto mais geral, mais rápida é a leitura.</p>
+<h2>Ideia-chave</h2>
+<p>Um plano ajuda-te a <strong>dosar a informação</strong> numa imagem: quanto mais afastada está a câmara, mais descreves o espaço; quanto mais te aproximas, mais destacas emoções e detalhes.</p>
+<ul>
+<li><strong>Planos gerais</strong> - são mais descritivos: situam o lugar e criam uma leitura mais "respirada".</li>
+<li><strong>Planos médios</strong> - têm valor narrativo: mostram ação e relação entre personagens, sem perder o contexto.</li>
+<li><strong>Planos próximos</strong> - são expressivos: aproximam-nos do rosto ou do detalhe e tornam a imagem mais íntima.</li>
+</ul>
+<p class="note"><strong>Regra prática:</strong>  quanto mais pormenor, mais tempo o espectador precisa para "ler" a imagem; quanto mais geral, mais rápida é a leitura.</p>
 </section>
-
-
-<section class="section" aria-labelledby="titEsquemaPlanos">
-  <h2 id="titEsquemaPlanos">Esquema</h2>
-  <p>Consulta o esquema para perceberes o enquadramento dos planos.</p>
-  <figure class="figure figure--scheme">
-    <a class="lightboxLink" href="#" data-full="assets/img/esquema_planos.png" aria-label="Abrir esquema em tamanho grande">
-      <img
-        src="assets/img/esquema_planos.png"
-        alt="Esquema do enquadramento dos planos, do plano geral ao plano de pormenor."
-        loading="lazy"
-      />
-    </a>
-  </figure>
+<section aria-labelledby="titEsquemaPlanos" class="section">
+<h2 id="titEsquemaPlanos">Esquema</h2>
+<p>Consulta o esquema para perceberes o enquadramento dos planos.</p>
+<figure class="figure figure--scheme">
+<a aria-label="Abrir esquema em tamanho grande" class="lightboxLink" data-full="assets/img/esquema_planos.png" href="#">
+<img alt="Esquema do enquadramento dos planos, do plano geral ao plano de pormenor." loading="lazy" src="assets/img/esquema_planos.png"/>
+</a>
+</figure>
 </section>
-
-
 <section class="section">
- <h2>Plano Geral</h2>
- <p>Mostra o espaço e o contexto.</p>
-  <p class="note"><strong>Leitura: breve (capta-se rápido o contexto).</strong></p>
- 
- <figure class="figure">
- <img src="assets/exemplos/planos_foto/01_Plano_Geral.png" alt="Exemplo de Plano Geral (foto)." loading="lazy" />
- <figcaption>Fotografia (exemplo de Plano Geral)</figcaption>
- </figure>
-
- 
- <figure class="figure">
- <video controls preload="metadata" src="assets/exemplos/planos_video/01_Plano_Geral.mp4">
+<h2>Plano Geral</h2>
+<p>Mostra o espaço e o contexto.</p>
+<p class="note"><strong>Leitura: breve (capta-se rápido o contexto).</strong></p>
+<figure class="figure">
+<img alt="Exemplo de Plano Geral (foto)." loading="lazy" src="assets/exemplos/planos_foto/01_Plano_Geral.png"/>
+<figcaption>Fotografia (exemplo de Plano Geral)</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata" src="assets/exemplos/planos_video/01_Plano_Geral.mp4">
  Desculpa, o teu navegador não suporta vídeo HTML5.
  </video>
- <figcaption>Vídeo (exemplo de Plano Geral)</figcaption>
- </figure>
-
+<figcaption>Vídeo (exemplo de Plano Geral)</figcaption>
+</figure>
 </section>
-
-
 <section class="section">
- <h2>Plano Geral Médio</h2>
- <p>Equilibra sujeito e contexto.</p>
-  <p class="note"><strong>Leitura: média (há mais informação a observar).</strong></p>
- 
- <figure class="figure">
- <img src="assets/exemplos/planos_foto/02_Plano_Geral_Medio.png" alt="Exemplo de Plano Geral Médio (foto)." loading="lazy" />
- <figcaption>Fotografia (exemplo de Plano Geral Médio)</figcaption>
- </figure>
-
- 
- <figure class="figure">
- <video controls preload="metadata" src="assets/exemplos/planos_video/02_Plano_Geral_Medio.mp4">
+<h2>Plano Geral Médio</h2>
+<p>Equilibra sujeito e contexto.</p>
+<p class="note"><strong>Leitura: média (há mais informação a observar).</strong></p>
+<figure class="figure">
+<img alt="Exemplo de Plano Geral Médio (foto)." loading="lazy" src="assets/exemplos/planos_foto/02_Plano_Geral_Medio.png"/>
+<figcaption>Fotografia (exemplo de Plano Geral Médio)</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata" src="assets/exemplos/planos_video/02_Plano_Geral_Medio.mp4">
  Desculpa, o teu navegador não suporta vídeo HTML5.
  </video>
- <figcaption>Vídeo (exemplo de Plano Geral Médio)</figcaption>
- </figure>
-
+<figcaption>Vídeo (exemplo de Plano Geral Médio)</figcaption>
+</figure>
 </section>
-
-
 <section class="section">
- <h2>Plano Americano</h2>
- <p>Bom para ação/atitude (até ao joelho).</p>
-  <p class="note"><strong>Leitura: média a longa (ação + detalhes do grupo).</strong></p>
- 
- <figure class="figure">
- <img src="assets/exemplos/planos_foto/03_Plano_Americano.png" alt="Exemplo de Plano Americano (foto)." loading="lazy" />
- <figcaption>Fotografia (exemplo de Plano Americano)</figcaption>
- </figure>
-
- 
- <figure class="figure">
- <video controls preload="metadata" src="assets/exemplos/planos_video/03_Plano_Americano.mp4">
+<h2>Plano Americano</h2>
+<p>Bom para ação/atitude (até ao joelho).</p>
+<p class="note"><strong>Leitura: média a longa (ação + detalhes do grupo).</strong></p>
+<figure class="figure">
+<img alt="Exemplo de Plano Americano (foto)." loading="lazy" src="assets/exemplos/planos_foto/03_Plano_Americano.png"/>
+<figcaption>Fotografia (exemplo de Plano Americano)</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata" src="assets/exemplos/planos_video/03_Plano_Americano.mp4">
  Desculpa, o teu navegador não suporta vídeo HTML5.
  </video>
- <figcaption>Vídeo (exemplo de Plano Americano)</figcaption>
- </figure>
-
+<figcaption>Vídeo (exemplo de Plano Americano)</figcaption>
+</figure>
 </section>
-
-
 <section class="section">
- <h2>Plano Médio</h2>
- <p>Para diálogo/gesto (até à cintura).</p>
-  <p class="note"><strong>Leitura: média (bom para diálogo e gesto).</strong></p>
- 
- <figure class="figure">
- <img src="assets/exemplos/planos_foto/04_Plano_Medio.png" alt="Exemplo de Plano Médio (foto)." loading="lazy" />
- <figcaption>Fotografia (exemplo de Plano Médio)</figcaption>
- </figure>
-
- 
- <figure class="figure">
- <video controls preload="metadata" src="assets/exemplos/planos_video/04_Plano_Medio.mp4">
+<h2>Plano Médio</h2>
+<p>Para diálogo/gesto (até à cintura).</p>
+<p class="note"><strong>Leitura: média (bom para diálogo e gesto).</strong></p>
+<figure class="figure">
+<img alt="Exemplo de Plano Médio (foto)." loading="lazy" src="assets/exemplos/planos_foto/04_Plano_Medio.png"/>
+<figcaption>Fotografia (exemplo de Plano Médio)</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata" src="assets/exemplos/planos_video/04_Plano_Medio.mp4">
  Desculpa, o teu navegador não suporta vídeo HTML5.
  </video>
- <figcaption>Vídeo (exemplo de Plano Médio)</figcaption>
- </figure>
-
+<figcaption>Vídeo (exemplo de Plano Médio)</figcaption>
+</figure>
 </section>
-
-
 <section class="section">
- <h2>Plano Próximo (Médio Curto)</h2>
- <p>Mais emoção/expressão (peito/ombros).</p>
-  <p class="note"><strong>Leitura: longa (a expressão e os detalhes pedem mais atenção).</strong></p>
- 
- <figure class="figure">
- <img src="assets/exemplos/planos_foto/05_Plano_Proximo.png" alt="Exemplo de Plano Próximo (Médio Curto) (foto)." loading="lazy" />
- <figcaption>Fotografia (exemplo de Plano Próximo (Médio Curto))</figcaption>
- </figure>
-
- 
- <figure class="figure">
- <video controls preload="metadata" src="assets/exemplos/planos_video/05_Plano_Proximo.mp4">
+<h2>Plano Próximo (Médio Curto)</h2>
+<p>Mais emoção/expressão (peito/ombros).</p>
+<p class="note"><strong>Leitura: longa (a expressão e os detalhes pedem mais atenção).</strong></p>
+<figure class="figure">
+<img alt="Exemplo de Plano Próximo (Médio Curto) (foto)." loading="lazy" src="assets/exemplos/planos_foto/05_Plano_Proximo.png"/>
+<figcaption>Fotografia (exemplo de Plano Próximo (Médio Curto))</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata" src="assets/exemplos/planos_video/05_Plano_Proximo.mp4">
  Desculpa, o teu navegador não suporta vídeo HTML5.
  </video>
- <figcaption>Vídeo (exemplo de Plano Próximo (Médio Curto))</figcaption>
- </figure>
-
+<figcaption>Vídeo (exemplo de Plano Próximo (Médio Curto))</figcaption>
+</figure>
 </section>
-
-
 <section class="section">
- <h2>Grande Plano</h2>
- <p>Expressão intensa (rosto domina).</p>
-  <p class="note"><strong>Leitura: variável (depende do impacto que queres dar).</strong></p>
- 
- <figure class="figure">
- <img src="assets/exemplos/planos_foto/06_Grande_Plano.png" alt="Exemplo de Grande Plano (foto)." loading="lazy" />
- <figcaption>Fotografia (exemplo de Grande Plano)</figcaption>
- </figure>
-
- 
- <figure class="figure">
- <video controls preload="metadata" src="assets/exemplos/planos_video/06_Grande_Plano.mp4">
+<h2>Grande Plano</h2>
+<p>Expressão intensa (rosto domina).</p>
+<p class="note"><strong>Leitura: variável (depende do impacto que queres dar).</strong></p>
+<figure class="figure">
+<img alt="Exemplo de Grande Plano (foto)." loading="lazy" src="assets/exemplos/planos_foto/06_Grande_Plano.png"/>
+<figcaption>Fotografia (exemplo de Grande Plano)</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata" src="assets/exemplos/planos_video/06_Grande_Plano.mp4">
  Desculpa, o teu navegador não suporta vídeo HTML5.
  </video>
- <figcaption>Vídeo (exemplo de Grande Plano)</figcaption>
- </figure>
-
+<figcaption>Vídeo (exemplo de Grande Plano)</figcaption>
+</figure>
 </section>
-
-
 <section class="section">
- <h2>Plano de Pormenor</h2>
- <p>Detalhe significativo (mãos/objeto/olhos).</p>
-  <p class="note"><strong>Leitura: breve (um detalhe - impacto direto).</strong></p>
- 
- <figure class="figure">
- <img src="assets/exemplos/planos_foto/07_Plano_Detalhe.png" alt="Exemplo de Plano de Pormenor (foto)." loading="lazy" />
- <figcaption>Fotografia (exemplo de Plano de Pormenor)</figcaption>
- </figure>
-
- 
- <figure class="figure">
- <video controls preload="metadata" src="assets/exemplos/planos_video/07_Plano_Detalhe.mp4">
+<h2>Plano de Pormenor</h2>
+<p>Detalhe significativo (mãos/objeto/olhos).</p>
+<p class="note"><strong>Leitura: breve (um detalhe - impacto direto).</strong></p>
+<figure class="figure">
+<img alt="Exemplo de Plano de Pormenor (foto)." loading="lazy" src="assets/exemplos/planos_foto/07_Plano_Detalhe.png"/>
+<figcaption>Fotografia (exemplo de Plano de Pormenor)</figcaption>
+</figure>
+<figure class="figure">
+<video controls="" preload="metadata" src="assets/exemplos/planos_video/07_Plano_Detalhe.mp4">
  Desculpa, o teu navegador não suporta vídeo HTML5.
  </video>
- <figcaption>Vídeo (exemplo de Plano de Pormenor)</figcaption>
- </figure>
-
+<figcaption>Vídeo (exemplo de Plano de Pormenor)</figcaption>
+</figure>
 </section>
-
-
- 
-
 <section class="section">
- <h2>Mini‑tarefa (Planos)</h2>
- <div class="note">
-  <p>Realiza a tarefa em fotografia e em vídeo: no total, produz 3 fotografias e 3 vídeos. No conjunto final, todos os planos têm de estar representados.</p>
-  <ul>
-   <li><strong>Fotografia (3):</strong> cada fotografia deve mostrar um plano diferente, bem identificado pelo enquadramento (ex.: geral, médio, grande plano, etc.).</li>
-   <li><strong>Vídeo (3):</strong> grava 3 vídeos aplicando os planos que não ficaram representados nas fotografias (ou seja, os planos “em falta” após as 3 fotos). Assim, ao juntar fotografias + vídeos, ficam todos os planos cobertos.</li>
-  </ul>
-  <p>Mantém, sempre que possível, o mesmo motivo/cenário para facilitar a comparação entre planos.</p>
- </div>
+<h2>Mini‑tarefa</h2>
+<div class="note">
+<p>Realiza a tarefa em fotografia e em vídeo: no total, produz 3 fotografias e 3 vídeos. No conjunto final, todos os planos têm de estar representados.</p>
+<ul>
+<li><strong>Fotografia (3):</strong> cada fotografia deve mostrar um plano diferente, bem identificado pelo enquadramento (ex.: geral, médio, grande plano, etc.).</li>
+<li><strong>Vídeo (3):</strong> grava 3 vídeos aplicando os planos que não ficaram representados nas fotografias (ou seja, os planos “em falta” após as 3 fotos). Assim, ao juntar fotografias + vídeos, ficam todos os planos cobertos.</li>
+</ul>
+<p>Mantém, sempre que possível, o mesmo motivo/cenário para facilitar a comparação entre planos.</p>
+</div>
 </section>
-
 </main>
-
 <footer>
- <div class="footerwrap">
-  <div>Manuel Morais ©2026</div>
-  <div><a href="glossario.html">Glossário</a></div>
- </div>
+<div class="footerwrap">
+<div>Manuel Morais ©2026</div>
+<div><a href="glossario.html">Glossário</a></div>
+</div>
 </footer>
-
 <!-- Popup / Lightbox (abre com clique; fecha com ESC ou com X) -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <div class="lightbox__backdrop" data-close="1"></div>
-  <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-label="Visualização de imagem">
-    <button class="lightbox__close" type="button" aria-label="Fechar" data-close="1">×</button>
-    <img class="lightbox__img" id="lightboxImg" alt="">
-    <img class="lightbox__wm" src="assets/logo_betoqm_prata.png" alt="" aria-hidden="true">
-  </div>
+<div aria-hidden="true" class="lightbox" id="lightbox">
+<div class="lightbox__backdrop" data-close="1"></div>
+<div aria-label="Visualização de imagem" aria-modal="true" class="lightbox__dialog" role="dialog">
+<button aria-label="Fechar" class="lightbox__close" data-close="1" type="button">×</button>
+<img alt="" class="lightbox__img" id="lightboxImg"/>
+<img alt="" aria-hidden="true" class="lightbox__wm" src="assets/logo_betoqm_prata.png"/>
 </div>
-
+</div>
 <script src="js/ui.js"></script>
-
-
-<div class="lightbox" id="qrbox" aria-hidden="true">
-  <div class="lightbox__backdrop" data-qr-close="1"></div>
-  <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-label="QR Code">
-    <button class="lightbox__close" type="button" aria-label="Fechar" data-qr-close="1">×</button>
-    <img class="lightbox__img" id="qrImg" alt="QR Code desta página">
-  </div>
+<div aria-hidden="true" class="lightbox" id="qrbox">
+<div class="lightbox__backdrop" data-qr-close="1"></div>
+<div aria-label="QR Code" aria-modal="true" class="lightbox__dialog" role="dialog">
+<button aria-label="Fechar" class="lightbox__close" data-qr-close="1" type="button">×</button>
+<img alt="QR Code desta página" class="lightbox__img" id="qrImg"/>
 </div>
-
+</div>
 </body>
 </html>

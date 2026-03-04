@@ -180,6 +180,7 @@ main{
  padding: 22px;
 }
 .hero h1{margin:0 0 8px; font-size: clamp(1.45rem, 2.5vw, 2.05rem)}
+h1 .pageSub{display:block; margin-top:2px; font-size:0.78em; font-weight:700; opacity:.9}
 .hero p{margin:0; color:var(--muted)}
 .badges{
  margin-top:14px;
@@ -527,46 +528,86 @@ footer{
 }
 
 
+
+.mobileQuote{display:none}
+.mobileRow{display:none}
 /* Menu mobile (hambúrguer) */
 .menuBtn{display:none}
 @media (max-width: 820px){
-  .topbar{flex-wrap:wrap; align-items:flex-start}
-  .menuBtn{display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.25); color:var(--text)}
-  .tools{width:100%; order:1; justify-content:flex-end; margin-top:6px}
-  .brand{width:100%; order:2; margin-top:10px}
+  /* Estrutura do cabeçalho em mobile:
+     1) Botões (tools)
+     2) Logo (brand)
+     3) Menu (hambúrguer) + frase à direita (mobileRow) */
+  .topbar{
+    flex-direction:column;
+    align-items:stretch;
+    /* mais espaço vertical entre: botões / logo / linha do menu+frase */
+    gap:16px;
+    position:relative;
+  }
+
+  /* 1) Botões */
+  .tools{
+    width:100%;
+    justify-content:flex-end;
+    margin-top:0;
+    order:0;
+  }
+
+  /* 2) Logo */
+  .brand{
+    width:100%;
+    order:1;
+    margin-top:0;
+  }
   .brand img{width:62px; height:auto}
   .brand .title strong{display:block; font-size:1.15rem; line-height:1.15}
   .brand .title span{display:block}
+
+  /* 3) Linha: hambúrguer + citação (3 linhas) */
+  .mobileRow{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    order:2;
+    width:100%;
+    margin-top:0;
+  }
+  .menuBtn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(0,0,0,.25);
+    color:var(--text);
+    flex:0 0 auto;
+  }
+  .mobileQuote{
+    display:block;
+    text-align:right;
+    font-size:.78rem;
+    line-height:1.05; /* manter espaçamento entre linhas */
+    opacity:.9;
+    max-width:64vw;
+    font-style:italic;
+    margin:0;
+    flex:1 1 auto;
+  }
+  .mobileQuote span{display:block}
+
+  /* Em mobile, não mostrar a citação dentro do menu aberto */
+  .menuQuote{display:none !important}
+
+  /* Menu recolhível */
   #navPanel{display:none; margin-top:10px}
   body.nav-open #navPanel{display:block}
-  .navlist{flex-direction:column; align-items:stretch}
-  .navlist a{display:block; padding:12px 12px}
+  .navlist{flex-direction:column; gap:6px}
+  .navlist a{display:block}
 }
 
-
-  #navPanel{order:3}
-  .menuBtn{order:0}
-  .tools{order:1}
-}
-
-footer{
-  border-top:1px solid var(--border);
-  background: var(--panel2);
-}
-
-/* Mobile: tools no topo; logo e texto ocupam a largura; menu por baixo do logotipo */
-@media (max-width: 820px){
-  .topbar{flex-wrap:wrap; align-items:flex-start}
-  .tools{width:100%; order:0; justify-content:flex-end; margin-top:0}
-  .brand{width:100%; order:1; margin-top:10px}
-  .brand img{width:62px; height:auto}
-  .brand .title strong{display:block; font-size:1.15rem; line-height:1.15}
-  .brand .title span{display:block}
-  .menuBtn{order:2; margin-top:10px}
-  #navPanel{margin-top:8px}
-}
-
-/* Mobile: link ativo a laranja */
 @media (max-width: 820px){
   .navlist a[aria-current="page"]{
     color:#f86002;
@@ -1601,3 +1642,21 @@ html.theme-light .exampleMedia video{ background:#fff; }
 
 /* Mais separação antes da prática (Panorâmica) */
 .practiceNote{margin-top:18px;}
+
+
+/* --- Fix: desktop header alignment (brand left, tools right) --- */
+@media (min-width: 821px){
+  .topbar{align-items:flex-start;}
+  .brand{order:0;}
+  .tools{order:2; margin-left:auto;}
+  .mobileRow{display:none !important;}
+}
+
+/* --- Fix: mobile spacing between tools, logo, and menu+quote --- */
+@media (max-width: 820px){
+  .topbar{flex-direction:column; align-items:stretch;}
+  .tools{order:0;}
+  .brand{order:1; margin-top:10px;}
+  .mobileRow{order:2; margin-top:12px;}
+}
+
