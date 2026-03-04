@@ -308,6 +308,42 @@ main{
  text-align:center;
 }
 
+/* Moldura específica para exemplos (vídeo) – Panorâmica */
+.figure.exampleFrame{
+ border: 1px solid rgba(255,255,255,.10);
+ /* Sem a linha amarela: usa o mesmo estilo das restantes páginas */
+ background: var(--panel2);
+ padding: 12px;
+}
+.exampleMedia{
+ border: 2px solid rgba(255,255,255,.14);
+ border-radius: 12px;
+ padding: 8px;
+ background: rgba(0,0,0,.18);
+}
+.exampleMedia video{
+ border: 0;
+ border-radius: 10px;
+ max-height: 460px;
+ background: rgba(0,0,0,.22);
+}
+
+/* Moldura do grupo de exemplos (título + vídeos) */
+.examplesWrap{
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+.examplesHeading{
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--muted);
+}
+.examplesWrap .grid2{ margin: 0; }
+
 /* Regra dos Terços: grelha com 2 figuras lado a lado */
 .figureGrid{
  display: grid;
@@ -325,6 +361,7 @@ main{
  padding: 10px 12px;
  background: rgba(244,181,70,.08);
  border-radius: 12px;
+ margin-bottom: 18px;
  color: var(--muted);
 }
 kbd{
@@ -1555,3 +1592,12 @@ input, textarea, select, button, [contenteditable="true"]{
 
 /* Transição suave entre fotos no lightbox */
 #lightboxImg{transition: opacity 180ms ease; will-change: opacity;}
+
+/* Ajuste das molduras dos exemplos no tema claro (mantém estilo consistente) */
+html.theme-light .figure.exampleFrame{ border-color: var(--border); }
+html.theme-light .exampleMedia{ border-color: rgba(0,0,0,.18); background: rgba(255,255,255,.55); }
+html.theme-light .exampleMedia video{ background:#fff; }
+
+
+/* Mais separação antes da prática (Panorâmica) */
+.practiceNote{margin-top:18px;}
