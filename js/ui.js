@@ -650,18 +650,21 @@ const openLb = async (src, alt, shouldWatermark, compareSrc, compareStart, galle
     }, { passive: true, capture: true });
   })();
 
-  // Galeria: usar miniaturas (assets/galeria/thumbs/) quando existirem,
+  // Galeria: usar miniaturas (assets/galeria/mini/) quando existirem,
   // mantendo a imagem completa no data-full para a popup.
   document.addEventListener('DOMContentLoaded', () => {
+  // construir grelha da galeria (mini/full) a partir de numeração 01.. 
+  buildAutoGallery();
+
     document.querySelectorAll('a.galleryItem[data-full] img').forEach((img) => {
       const a = img.closest('a.galleryItem[data-full]');
       if(!a) return;
       const full = a.getAttribute('data-full') || '';
       if(!full.includes('assets/galeria/')) return;
       // Já é thumbnail
-      if((img.getAttribute('src') || '').includes('/thumbs/')) return;
+      if((img.getAttribute('src') || '').includes('/mini/')) return;
 
-      const thumb = full.replace('assets/galeria/', 'assets/galeria/thumbs/');
+      const thumb = full.replace('assets/galeria/', 'assets/galeria/mini/');
       // Tenta thumbnail; se falhar, volta ao full (sem quebrar)
       img.dataset.thumbTried = '1';
       img.addEventListener('error', function onErr(){
@@ -1093,3 +1096,63 @@ document.addEventListener('DOMContentLoaded', () => {
   else run();
 })();
 
+
+
+/* ===== Galeria: gerar miniaturas automaticamente (01, 02, 03, ...) ===== */
+function pad2(n){ return String(n).padStart(2,'0'); }
+
+async function firstThatLoads(urls){
+  return await new Promise((resolve) => {
+    let idx = 0;
+    const tryNext = () => {
+      if(idx >= urls.length) return resolve(null);
+      const url = urls[idx++];
+      const img = new Image();
+      img.onload = () => resolve(url);
+      img.onerror = () => tryNext();
+      img.src = url;
+    };
+    tryNext();
+  });
+}
+
+async function buildAutoGallery(){
+  const grid = document.getElementById('galleryGrid');
+  if(!grid || grid.dataset.autoGallery !== 'true') return;
+
+  const max = parseInt(grid.dataset.max || '99', 10);
+  const miniBase = 'assets/galeria/mini/';
+  const fullBase = 'assets/galeria/full/';
+  const exts = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG', '.webp', '.WEBP'];
+
+  // Para não bloquear o carregamento: vamos construir progressivamente
+  for(let i=1; i<=max; i++){
+    const nn = pad2(i);
+    const miniCandidates = exts.map(ext => miniBase + nn + ext);
+    const miniUrl = await firstThatLoads(miniCandidates);
+    if(!miniUrl) continue; // não existe -> não cria item
+
+    // Tenta encontrar o full correspondente com a mesma numeração
+    const fullCandidates = exts.map(ext => fullBase + nn + ext);
+    let fullUrl = await firstThatLoads(fullCandidates);
+    if(!fullUrl){
+      // fallback: mesma extensão do mini, mas na pasta full
+      fullUrl = miniUrl.replace('/mini/', '/full/');
+    }
+
+    const a = document.createElement('a');
+    a.className = 'galleryItem';
+    a.href = 'javascript:void(0)';
+    a.setAttribute('aria-label', `Abrir fotografia ${i}`);
+    a.dataset.full = fullUrl;
+
+    const img = document.createElement('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = '';
+    img.src = miniUrl;
+
+    a.appendChild(img);
+    grid.appendChild(a);
+  }
+}
