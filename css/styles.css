@@ -160,10 +160,6 @@ nav{flex:1}
  padding:8px 10px;
  cursor:pointer;
 }
-
-/* Acessibilidade: melhorar contraste do texto dos botões (A-, A+, Contraste, QR) sem alterar o fundo */
-.toolbtn{ color:#ffffff; }
-html.theme-light .toolbtn{ color:#000000; }
 .toolbtn:hover{background: rgba(255,255,255,.10)}
 .toolbtn[aria-pressed="true"]{
  background: rgba(244,181,70,.14);
