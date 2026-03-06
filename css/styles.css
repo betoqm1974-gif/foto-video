@@ -1794,3 +1794,9 @@ html.theme-dark #themeBtn .themeIcon.sun svg *{
   fill: none !important;
   color: #fff !important;
 }
+
+/* Botões do topo: letra maior (tema claro e escuro) */
+.tools .toolbtn,
+.tools .themeSwitch{
+  font-size: 1.02rem;
+}
