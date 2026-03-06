@@ -1779,3 +1779,18 @@ html.theme-light .tools .toolbtn,
 html.theme-light .tools .themeSwitch{
   border-color:#000 !important;
 }
+
+/* Mobile: na foto do index (lightbox) não mostrar marca de água */
+@media (max-width: 899px){
+  body.page-index .lightbox__wm{ display:none; }
+}
+
+/* Tema escuro: sol a branco */
+
+/* Tema escuro: forçar o ícone do sol a branco (stroke/fill) */
+html.theme-dark #themeBtn .themeIcon.sun svg,
+html.theme-dark #themeBtn .themeIcon.sun svg *{
+  stroke: #fff !important;
+  fill: none !important;
+  color: #fff !important;
+}
