@@ -72,7 +72,13 @@
  function init(){
   // Efeito spotlight (círculo desfocado) a seguir o rato (desktop) e o toque (mobile)
   (function initCursorGlow(){
+      window.__cursorGlowEnabled = true;
+
     try{
+      var saved = localStorage.getItem('cursorGlow');
+      var enabled = (saved === null) ? true : (saved === '1');
+      if(!enabled){ document.documentElement.classList.add('noCursorGlow'); return; }
+
       if(document.querySelector('.cursor-glow')) return;
 
       const glow = document.createElement('div');
@@ -633,6 +639,8 @@ const openLb = async (src, alt, shouldWatermark, compareSrc, compareStart, galle
     }, { passive: true, capture: true });
 
     document.addEventListener('touchmove', (e) => {
+      if(document.documentElement.classList.contains("noCursorGlow")) return;
+        if(!window.__cursorGlowEnabled) return;
       const t = e.touches && e.touches[0];
       if(!t) return;
       const dx = Math.abs(t.clientX - sx);
@@ -922,7 +930,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const b = box(), i = img();
     if(!b || !i) return;
     const url = (window.location && window.location.href) ? window.location.href : '';
-    i.src = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(url);
+    i.src = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=' + encodeURIComponent(url);
+    // reset zoom
+    const dlg = b.querySelector('.lightbox__dialog');
+    if(dlg) dlg.classList.remove('qrZoomed');
+    // toggle zoom ao clicar
+    if(!i.dataset.zoomBound){
+      i.dataset.zoomBound = '1';
+      i.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        const d = b.querySelector('.lightbox__dialog');
+        if(d) d.classList.toggle('qrZoomed');
+      });
+    }
     b.classList.add('is-open');
     b.setAttribute('aria-hidden','false');
     document.documentElement.classList.add('modal-open');
@@ -1156,3 +1176,194 @@ async function buildAutoGallery(){
     grid.appendChild(a);
   }
 }
+
+/* --- Brilho do rato (spotlight) --- */
+document.addEventListener('DOMContentLoaded', () => {
+  const STORAGE_KEY = 'mouseGlow';
+  const btn = document.getElementById('glowBtn');
+  if(!btn) return;
+
+  function ensureGlowEl(){
+    let el = document.getElementById('cursorGlow');
+    if(el) return el;
+    el = document.createElement('div');
+    el.id = 'cursorGlow';
+    el.setAttribute('aria-hidden','true');
+    document.body.appendChild(el);
+    return el;
+  }
+
+  function setEnabled(enabled){
+    localStorage.setItem(STORAGE_KEY, enabled ? '1' : '0');
+    btn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+    document.documentElement.classList.toggle('noMouseGlow', !enabled);
+
+    const el = document.getElementById('cursorGlow');
+    if(enabled){
+      ensureGlowEl();
+    }else if(el){
+      el.remove();
+    }
+  }
+
+  const saved = localStorage.getItem(STORAGE_KEY);
+  const enabled = saved === null ? true : saved === '1';
+  if(saved === null){ localStorage.setItem(KEY,'1'); }
+  setEnabled(enabled);
+
+  btn.addEventListener('click', () => {
+    const nowEnabled = btn.getAttribute('aria-pressed') !== 'true';
+    setEnabled(nowEnabled);
+  });
+
+  document.addEventListener('mousemove', (e) => {
+      if(document.documentElement.classList.contains("noCursorGlow")) return;
+        if(!window.__cursorGlowEnabled) return;
+    if(document.documentElement.classList.contains('noMouseGlow')) return;
+    const el = document.getElementById('cursorGlow') || ensureGlowEl();
+    el.style.left = e.clientX + 'px';
+    el.style.top  = e.clientY + 'px';
+  }, { passive:true });
+});
+
+// Controle do brilho do rato (botão)
+document.addEventListener('DOMContentLoaded', () => {
+  const KEY = 'cursorGlow';
+  const btn = document.getElementById('glowBtn');
+  if(!btn) return;
+
+  function apply(on){
+    localStorage.setItem(KEY, on ? '1' : '0');
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    window.__cursorGlowEnabled = on;
+    document.documentElement.classList.toggle('noCursorGlow', !on);
+
+    const el = document.querySelector('.cursor-glow');
+    if(!on){
+      if(el) el.remove();
+    }else{
+      // se não existir, força a criação chamando o init existente via evento de movimento
+      if(!el){
+        // cria já para não depender do 1º movimento
+        const g = document.createElement('div');
+        g.className = 'cursor-glow';
+        document.body.appendChild(g);
+      }
+    }
+  }
+
+  // começa sempre ativo se não houver valor guardado
+  if(localStorage.getItem(KEY) === null) localStorage.setItem(KEY,'1');
+
+  apply(localStorage.getItem(KEY) === '1');
+
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    apply(btn.getAttribute('aria-pressed') !== 'true');
+  });
+});
+
+/* --- Controle do brilho do rato (seta) --- */
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('glowBtn');
+  if(!btn) return;
+
+  // começa sempre ATIVO ao entrar no site
+  document.documentElement.classList.remove('noCursorGlow');
+  btn.setAttribute('aria-pressed','true');
+
+  function ensureGlow(){
+    let el = document.querySelector('.cursor-glow');
+    if(el) return el;
+    el = document.createElement('div');
+    el.className = 'cursor-glow';
+    document.body.appendChild(el);
+    return el;
+  }
+
+  ensureGlow();
+
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const isOn = btn.getAttribute('aria-pressed') === 'true';
+    const next = !isOn;
+
+    btn.setAttribute('aria-pressed', next ? 'true' : 'false');
+    document.documentElement.classList.toggle('noCursorGlow', !next);
+
+    const el = document.querySelector('.cursor-glow');
+    if(!next){
+      if(el) el.remove();
+    }else{
+      ensureGlow();
+    }
+  });
+});
+
+/* --- QR fullscreen (addon seguro) --- */
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.getElementById('qrbox');
+  const img = document.getElementById('qrImg');
+  if(!box || !img) return;
+
+  const getDlg = () => box.querySelector('.lightbox__dialog');
+
+  // reset sempre que abre/fecha
+  const obs = new MutationObserver(() => {
+    const dlg = getDlg();
+    if(!dlg) return;
+    dlg.classList.remove('qrFull');
+  });
+  obs.observe(box, { attributes:true, attributeFilter:['class'] });
+
+  if(!img.dataset.qrFullBound){
+    img.dataset.qrFullBound = '1';
+    img.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      const dlg = getDlg();
+      if(!dlg) return;
+      dlg.classList.toggle('qrFull');
+      if(dlg.classList.contains('qrFull')) dlg.scrollTop = 0;
+    });
+  }
+});
+
+/* --- Brilho do rato: toggle (addon robusto) --- */
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('glowBtn');
+  if(!btn) return;
+
+  // começa sempre ativo
+  document.documentElement.classList.remove('noCursorGlow');
+  btn.setAttribute('aria-pressed','true');
+
+  const ensure = () => {
+    let el = document.getElementById('cursorGlow');
+    if(el) return el;
+    el = document.createElement('div');
+    el.id = 'cursorGlow';
+    el.setAttribute('aria-hidden','true');
+    document.body.appendChild(el);
+    return el;
+  };
+
+  let el = ensure();
+
+  document.addEventListener('mousemove', (e) => {
+    if(document.documentElement.classList.contains('noCursorGlow')) return;
+    const g = document.getElementById('cursorGlow') || ensure();
+    g.style.left = e.clientX + 'px';
+    g.style.top  = e.clientY + 'px';
+  }, {passive:true});
+
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const isOn = btn.getAttribute('aria-pressed') === 'true';
+    const next = !isOn;
+    btn.setAttribute('aria-pressed', next ? 'true' : 'false');
+    document.documentElement.classList.toggle('noCursorGlow', !next);
+    if(next){
+      el = ensure();
+    }
+  });
+});
